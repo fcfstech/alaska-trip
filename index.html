@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alaska Fishing Trip – Allison Family 2026</title>
+<style>
+:root {
+  --navy: #1B3A5C;
+  --teal: #2E75B6;
+  --accent: #D5E8F0;
+  --light: #F2F7FA;
+  --green: #2D8B4E;
+  --red: #C0392B;
+  --gray: #666;
+  --lgray: #eee;
+  --bg: #f8fafb;
+  --card: #fff;
+  --text: #333;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+  color:#fff; text-align:center; padding:3rem 1.5rem 2rem;
+  position:relative; overflow:hidden;
+}
+.hero::after {
+  content:''; position:absolute; bottom:-2px; left:0; right:0; height:40px;
+  background:var(--bg); border-radius:50% 50% 0 0 / 100% 100% 0 0;
+}
+.hero h1 { font-size:2.2rem; font-weight:800; letter-spacing:2px; margin-bottom:.25rem; }
+.hero .subtitle { font-size:1.3rem; opacity:.9; font-weight:300; }
+.hero .dates { font-size:1.1rem; opacity:.8; margin-top:.5rem; }
+.hero .group { font-size:.95rem; opacity:.7; margin-top:.75rem; }
+
+/* COUNTDOWN */
+.countdown-bar {
+  background:rgba(255,255,255,.15); border-radius:12px; padding:1rem 1.5rem;
+  margin:1.5rem auto 0; max-width:400px; backdrop-filter:blur(10px);
+}
+.countdown-bar .label { font-size:.8rem; text-transform:uppercase; letter-spacing:1px; opacity:.7; }
+.countdown-nums { display:flex; justify-content:center; gap:1.5rem; margin-top:.5rem; }
+.countdown-nums .unit { text-align:center; }
+.countdown-nums .num { font-size:1.8rem; font-weight:700; }
+.countdown-nums .lbl { font-size:.7rem; text-transform:uppercase; opacity:.7; }
+
+/* NAV */
+.nav { position:sticky; top:0; z-index:100; background:var(--card); border-bottom:1px solid var(--lgray); overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch; }
+.nav-inner { display:flex; padding:.5rem 1rem; gap:.5rem; }
+.nav a {
+  display:inline-block; padding:.5rem .75rem; border-radius:8px; text-decoration:none;
+  font-size:.8rem; font-weight:600; color:var(--teal); background:var(--light);
+  transition:all .2s; flex-shrink:0;
+}
+.nav a:hover, .nav a.active { background:var(--teal); color:#fff; }
+
+/* CONTAINER */
+.container { max-width:720px; margin:0 auto; padding:0 1rem 3rem; }
+
+/* SECTION */
+.section { margin-top:2rem; }
+.section-title {
+  font-size:1.3rem; font-weight:700; color:var(--navy); padding-bottom:.5rem;
+  border-bottom:3px solid var(--teal); margin-bottom:1rem; display:flex; align-items:center; gap:.5rem;
+}
+.section-title .icon { font-size:1.4rem; }
+
+/* CARDS */
+.card {
+  background:var(--card); border-radius:12px; padding:1.25rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); margin-bottom:1rem;
+  border-left:4px solid var(--teal);
+}
+.card.alert { border-left-color:var(--red); background:#fef5f5; }
+.card.success { border-left-color:var(--green); background:#f0faf4; }
+.card.warn { border-left-color:#e6a817; background:#fffdf0; }
+.card.info { border-left-color:var(--teal); background:#f0f7fc; }
+.card-label { font-size:.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--gray); font-weight:600; margin-bottom:.25rem; }
+.card-value { font-size:1rem; font-weight:600; color:var(--navy); }
+.card-detail { font-size:.85rem; color:var(--gray); margin-top:.15rem; }
+
+/* INFO GRID */
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+@media(max-width:500px) { .info-grid { grid-template-columns:1fr; } }
+.info-item { background:var(--light); border-radius:8px; padding:.75rem 1rem; }
+.info-item .label { font-size:.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--gray); font-weight:600; }
+.info-item .value { font-size:.95rem; font-weight:600; color:var(--navy); margin-top:.15rem; }
+
+/* FLIGHT TABLE */
+.flight-card {
+  background:var(--card); border-radius:12px; padding:1rem 1.25rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); margin-bottom:.75rem;
+}
+.flight-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem; }
+.flight-leg { font-size:.75rem; font-weight:700; color:#fff; background:var(--teal); padding:.2rem .6rem; border-radius:4px; }
+.flight-date { font-size:.8rem; color:var(--gray); }
+.flight-route { display:flex; align-items:center; gap:.75rem; margin:.75rem 0; }
+.flight-point { text-align:center; flex:0 0 auto; }
+.flight-code { font-size:1.3rem; font-weight:700; color:var(--navy); }
+.flight-city { font-size:.75rem; color:var(--gray); }
+.flight-line { flex:1; position:relative; height:2px; background:var(--lgray); }
+.flight-line::after { content:'✈'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); color:var(--teal); font-size:1rem; }
+.flight-meta { display:flex; gap:1rem; flex-wrap:wrap; }
+.flight-meta span { font-size:.8rem; color:var(--gray); }
+.flight-meta strong { color:var(--text); }
+.conf-code { font-size:.8rem; font-weight:700; color:var(--teal); background:var(--accent); padding:.15rem .5rem; border-radius:4px; }
+
+/* DAY BLOCKS */
+.day-block { margin-bottom:1rem; }
+.day-header {
+  display:flex; align-items:center; gap:.75rem; padding:1rem 1.25rem;
+  background:var(--card); border-radius:12px 12px 0 0; cursor:pointer;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); user-select:none;
+  border-left:4px solid var(--teal); transition:all .2s;
+}
+.day-header:hover { background:var(--light); }
+.day-header.collapsed { border-radius:12px; }
+.day-num { font-size:1.5rem; font-weight:800; color:var(--teal); min-width:2.5rem; }
+.day-info { flex:1; }
+.day-date { font-size:.8rem; color:var(--gray); }
+.day-title { font-size:1rem; font-weight:700; color:var(--navy); }
+.day-toggle { font-size:1.2rem; color:var(--gray); transition:transform .3s; }
+.day-header.collapsed .day-toggle { transform:rotate(-90deg); }
+.day-content {
+  background:var(--card); border-radius:0 0 12px 12px; padding:0 1.25rem 1rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); border-left:4px solid var(--teal);
+  border-top:1px solid var(--lgray);
+}
+.day-content.hidden { display:none; }
+.activity { display:flex; gap:.75rem; padding:.6rem 0; border-bottom:1px solid var(--lgray); }
+.activity:last-child { border-bottom:none; }
+.act-time { font-size:.8rem; font-weight:700; color:var(--teal); min-width:5.5rem; flex-shrink:0; padding-top:.1rem; }
+.act-desc { font-size:.9rem; color:var(--text); }
+
+/* SPECIES TABLE */
+.species-card {
+  background:var(--card); border-radius:12px; padding:1rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); margin-bottom:.5rem;
+  display:flex; align-items:center; gap:1rem;
+}
+.species-icon { font-size:1.5rem; }
+.species-info { flex:1; }
+.species-name { font-weight:700; color:var(--navy); font-size:.95rem; }
+.species-detail { font-size:.8rem; color:var(--gray); }
+.species-badge {
+  font-size:.7rem; font-weight:700; padding:.2rem .5rem; border-radius:4px;
+  text-transform:uppercase; letter-spacing:.5px; flex-shrink:0;
+}
+.badge-peak { background:#d4edda; color:#155724; }
+.badge-good { background:var(--accent); color:var(--teal); }
+.badge-available { background:var(--lgray); color:var(--gray); }
+
+/* CHECKLIST */
+.checklist-group { margin-bottom:1.5rem; }
+.checklist-group h3 { font-size:1rem; font-weight:700; color:var(--teal); margin-bottom:.5rem; }
+.check-item {
+  display:flex; align-items:flex-start; gap:.5rem; padding:.4rem 0;
+  cursor:pointer; user-select:none;
+}
+.check-item input { margin-top:.25rem; accent-color:var(--teal); width:18px; height:18px; flex-shrink:0; }
+.check-item label { font-size:.9rem; cursor:pointer; }
+.check-item.checked label { text-decoration:line-through; color:var(--gray); }
+.check-item.do-not-pack label { color:var(--red); }
+.checklist-progress {
+  background:var(--lgray); border-radius:8px; height:8px; margin-bottom:1rem; overflow:hidden;
+}
+.checklist-progress-bar { height:100%; background:var(--teal); border-radius:8px; transition:width .3s; }
+.checklist-progress-text { font-size:.8rem; color:var(--gray); margin-bottom:.5rem; text-align:right; }
+
+/* BUDGET TABLE */
+.budget-row { display:flex; justify-content:space-between; padding:.6rem 0; border-bottom:1px solid var(--lgray); font-size:.9rem; }
+.budget-row:last-child { border-bottom:none; }
+.budget-row.total { font-weight:700; font-size:1rem; color:var(--navy); border-top:2px solid var(--teal); padding-top:.75rem; margin-top:.25rem; }
+.budget-row .status { font-size:.75rem; font-weight:700; padding:.15rem .4rem; border-radius:4px; }
+.status-booked { background:#d4edda; color:#155724; }
+.status-invoiced { background:var(--accent); color:var(--teal); }
+.status-pending { background:#fff3cd; color:#856404; }
+.status-needed { background:#f8d7da; color:#721c24; }
+
+/* CONTACTS */
+.contact-card {
+  background:var(--card); border-radius:12px; padding:1rem 1.25rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); margin-bottom:.5rem;
+  display:flex; align-items:center; gap:1rem;
+}
+.contact-icon { font-size:1.3rem; width:2.5rem; height:2.5rem; display:flex; align-items:center; justify-content:center; background:var(--light); border-radius:50%; flex-shrink:0; }
+.contact-info { flex:1; }
+.contact-name { font-weight:700; color:var(--navy); font-size:.95rem; }
+.contact-detail { font-size:.8rem; color:var(--gray); }
+.contact-detail a { color:var(--teal); text-decoration:none; }
+
+/* FOOTER */
+.footer { text-align:center; padding:2rem 1rem; color:var(--gray); font-size:.8rem; border-top:1px solid var(--lgray); margin-top:2rem; }
+
+/* CALLOUT */
+.callout { padding:1rem 1.25rem; border-radius:10px; margin-bottom:1rem; font-size:.9rem; display:flex; gap:.5rem; align-items:flex-start; }
+.callout.tip { background:#fff3cd; color:#856404; }
+.callout.important { background:#f8d7da; color:#721c24; }
+.callout.good { background:#d4edda; color:#155724; }
+.callout.info { background:#d1ecf1; color:#0c5460; }
+.callout-icon { font-size:1.1rem; flex-shrink:0; padding-top:.05rem; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>ALASKA</h1>
+  <div class="subtitle">Fishing Trip Itinerary</div>
+  <div class="dates">July 12 – 19, 2026 &nbsp;•&nbsp; Alagnak Lodge</div>
+  <div class="group">Danny &nbsp;•&nbsp; Danny &nbsp;•&nbsp; Owen &nbsp;•&nbsp; Ethan Allison</div>
+  <div class="countdown-bar">
+    <div class="label">Countdown to Departure</div>
+    <div class="countdown-nums" id="countdown">
+      <div class="unit"><div class="num" id="cd-days">--</div><div class="lbl">Days</div></div>
+      <div class="unit"><div class="num" id="cd-hrs">--</div><div class="lbl">Hours</div></div>
+      <div class="unit"><div class="num" id="cd-min">--</div><div class="lbl">Min</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#overview">Overview</a>
+    <a href="#flights">Flights</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#species">Fish</a>
+    <a href="#budget">Budget</a>
+    <a href="#packing">Packing</a>
+    <a href="#todo">To-Do</a>
+    <a href="#contacts">Contacts</a>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<div class="section" id="overview">
+  <div class="section-title"><span class="icon">📋</span> Trip Overview</div>
+  <div class="info-grid">
+    <div class="info-item"><div class="label">Lodge</div><div class="value">Alagnak Lodge</div></div>
+    <div class="info-item"><div class="label">Location</div><div class="value">Bristol Bay, Alaska</div></div>
+    <div class="info-item"><div class="label">Lodge Contact</div><div class="value">Tony Behm</div></div>
+    <div class="info-item"><div class="label">Phone</div><div class="value"><a href="tel:8082279301" style="color:var(--navy);text-decoration:none">(808) 227-9301</a></div></div>
+    <div class="info-item"><div class="label">At the Lodge</div><div class="value">Jul 13 (PM) – Jul 18 (AM)</div></div>
+    <div class="info-item"><div class="label">Package</div><div class="value">5 Days / 10 Sessions</div></div>
+    <div class="info-item"><div class="label">Floatplane</div><div class="value">Branch River Air</div></div>
+    <div class="info-item"><div class="label">BRA Phone</div><div class="value"><a href="tel:9072463437" style="color:var(--navy);text-decoration:none">(907) 246-3437</a></div></div>
+  </div>
+  <div style="margin-top:1rem">
+    <div class="callout info">
+      <span class="callout-icon">📋</span>
+      <span><strong>NOTE:</strong> Your invoice shows arrival 7/12 and first fishing 7/12, but your ANC→AKN flight is on 7/13. Confirm with Tony that your 5 fishing days start the afternoon of July 13.</span>
+    </div>
+  </div>
+</div>
+
+<!-- FLIGHTS -->
+<div class="section" id="flights">
+  <div class="section-title"><span class="icon">✈️</span> Flights</div>
+
+  <div class="flight-card">
+    <div class="flight-header"><span class="flight-leg">LEG 1</span><span class="flight-date">Sun, July 12</span></div>
+    <div class="flight-route">
+      <div class="flight-point"><div class="flight-code">DFW</div><div class="flight-city">Dallas</div></div>
+      <div class="flight-line"></div>
+      <div class="flight-point"><div class="flight-code">ANC</div><div class="flight-city">Anchorage</div></div>
+    </div>
+    <div class="flight-meta">
+      <span><strong>AA 395</strong></span>
+      <span>Depart <strong>6:40 PM</strong></span>
+      <span>Arrive <strong>10:39 PM</strong></span>
+      <span>Seats <strong>13A/B/C/D</strong></span>
+      <span class="conf-code">FFXTAY</span>
+    </div>
+  </div>
+
+  <div class="flight-card">
+    <div class="flight-header"><span class="flight-leg">LEG 2</span><span class="flight-date">Mon, July 13</span></div>
+    <div class="flight-route">
+      <div class="flight-point"><div class="flight-code">ANC</div><div class="flight-city">Anchorage</div></div>
+      <div class="flight-line"></div>
+      <div class="flight-point"><div class="flight-code">AKN</div><div class="flight-city">King Salmon</div></div>
+    </div>
+    <div class="flight-meta">
+      <span><strong>AS 2158</strong></span>
+      <span>Depart <strong>11:39 AM</strong></span>
+      <span>Arrive <strong>12:46 PM</strong></span>
+      <span>Seats <strong>10A/B/C/D</strong></span>
+      <span style="font-size:.75rem;color:var(--gray)">Horizon Air / Alaska</span>
+    </div>
+  </div>
+
+  <div class="flight-card">
+    <div class="flight-header"><span class="flight-leg">LEG 3</span><span class="flight-date">Sat, July 18</span></div>
+    <div class="flight-route">
+      <div class="flight-point"><div class="flight-code">AKN</div><div class="flight-city">King Salmon</div></div>
+      <div class="flight-line"></div>
+      <div class="flight-point"><div class="flight-code">ANC</div><div class="flight-city">Anchorage</div></div>
+    </div>
+    <div class="flight-meta">
+      <span><strong>AS 352</strong></span>
+      <span>Depart <strong>5:59 PM</strong></span>
+      <span>Arrive <strong>7:08 PM</strong></span>
+      <span>Seats <strong>17A/B/C/F</strong></span>
+      <span style="font-size:.75rem;color:var(--gray)">Boeing 737-700</span>
+    </div>
+  </div>
+
+  <div class="flight-card">
+    <div class="flight-header"><span class="flight-leg">LEG 4</span><span class="flight-date">Sun, July 19</span></div>
+    <div class="flight-route">
+      <div class="flight-point"><div class="flight-code">ANC</div><div class="flight-city">Anchorage</div></div>
+      <div class="flight-line"></div>
+      <div class="flight-point"><div class="flight-code">DFW</div><div class="flight-city">Dallas</div></div>
+    </div>
+    <div class="flight-meta">
+      <span><strong>AA 407</strong></span>
+      <span>Depart <strong>7:00 AM</strong></span>
+      <span>Arrive <strong>4:42 PM</strong></span>
+      <span>Seats <strong>30A/B/C/D</strong></span>
+      <span class="conf-code">FFXTAY</span>
+    </div>
+  </div>
+
+  <div class="card success">
+    <div class="card-label">Hotel – Inbound Night</div>
+    <div class="card-value">Courtyard by Marriott Anchorage Airport</div>
+    <div class="card-detail">Jul 12–13 &nbsp;•&nbsp; 2 Queen &nbsp;•&nbsp; 4 Adults &nbsp;•&nbsp; Conf# 84475616</div>
+  </div>
+  <div class="card alert">
+    <div class="card-label">Hotel – Return Night</div>
+    <div class="card-value">NEED TO BOOK – July 18</div>
+    <div class="card-detail">AKN→ANC arrives 7:08 PM. ANC→DFW departs 7:00 AM next morning.</div>
+  </div>
+</div>
+
+<!-- DAY-BY-DAY -->
+<div class="section" id="schedule">
+  <div class="section-title"><span class="icon">📅</span> Day-by-Day Schedule</div>
+
+  <div class="day-block">
+    <div class="day-header" onclick="toggleDay(this)">
+      <div class="day-num">1</div>
+      <div class="day-info"><div class="day-date">Saturday, July 12</div><div class="day-title">Travel Day – Dallas to Anchorage</div></div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="activity"><div class="act-time">6:40 PM</div><div class="act-desc">Depart DFW on American Airlines AA 395 (nonstop to Anchorage)</div></div>
+      <div class="activity"><div class="act-time">10:39 PM</div><div class="act-desc">Arrive Anchorage (ANC) – Alaska Daylight Time</div></div>
+      <div class="activity"><div class="act-time">Late PM</div><div class="act-desc">Check into Courtyard by Marriott Anchorage Airport (Conf# 84475616)</div></div>
+      <div class="activity"><div class="act-time"></div><div class="act-desc">Last chance for forgotten gear: Sportsman's Warehouse or Cabela's in Anchorage area</div></div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header" onclick="toggleDay(this)">
+      <div class="day-num">2</div>
+      <div class="day-info"><div class="day-date">Sunday, July 13</div><div class="day-title">Arrive at Alagnak Lodge – First Fishing</div></div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="activity"><div class="act-time">11:39 AM</div><div class="act-desc">Depart ANC on Alaska Airlines AS 2158 to King Salmon</div></div>
+      <div class="activity"><div class="act-time">12:46 PM</div><div class="act-desc">Arrive King Salmon (AKN) – met by Branch River Air (907-246-3437)</div></div>
+      <div class="activity"><div class="act-time">Afternoon</div><div class="act-desc">Floatplane to Alagnak Lodge – 20 min scenic flight over the tundra</div></div>
+      <div class="activity"><div class="act-time">Afternoon</div><div class="act-desc">Settle in, meet the team, lodge orientation, gear setup</div></div>
+      <div class="activity"><div class="act-time">Afternoon</div><div class="act-desc"><strong>FIRST FISHING SESSION</strong> – guides select the best spots for conditions</div></div>
+      <div class="activity"><div class="act-time">Evening</div><div class="act-desc">Welcome dinner – chef-prepared, buffet-style (NY Strip, fresh salmon, or King Crab)</div></div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header" onclick="toggleDay(this)">
+      <div class="day-num">3</div>
+      <div class="day-info"><div class="day-date">Monday, July 14</div><div class="day-title">Full Fishing Day – Sockeye at Peak Run</div></div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="activity"><div class="act-time">7:00 AM</div><div class="act-desc">Breakfast at the lodge</div></div>
+      <div class="activity"><div class="act-time">8:00 AM</div><div class="act-desc">Morning session: Sockeye Salmon – this is peak week (July 12–20 prime)</div></div>
+      <div class="activity"><div class="act-time">Noon</div><div class="act-desc">Shore lunch on the river</div></div>
+      <div class="activity"><div class="act-time">1:00 PM</div><div class="act-desc">Afternoon session: King Salmon from the boat (they prefer deeper water)</div></div>
+      <div class="activity"><div class="act-time">6:00 PM</div><div class="act-desc">Return to lodge – steam room, bonfire, wildlife viewing</div></div>
+      <div class="activity"><div class="act-time">7:00 PM</div><div class="act-desc">Dinner at the lodge</div></div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header" onclick="toggleDay(this)">
+      <div class="day-num">4</div>
+      <div class="day-info"><div class="day-date">Tuesday, July 15</div><div class="day-title">Full Fishing Day – Species Mix</div></div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="activity"><div class="act-time">7:00 AM</div><div class="act-desc">Breakfast</div></div>
+      <div class="activity"><div class="act-time">8:00 AM</div><div class="act-desc">Morning session: Chum Salmon (entering river) or wade sandbars for Sockeye</div></div>
+      <div class="activity"><div class="act-time">Noon</div><div class="act-desc">Shore lunch</div></div>
+      <div class="activity"><div class="act-time">1:00 PM</div><div class="act-desc">Afternoon: Rainbow Trout – 20–22" avg, up to 27", gorging on salmon eggs</div></div>
+      <div class="activity"><div class="act-time"></div><div class="act-desc">Wildlife viewing – brown bears, bald eagles, foxes common along the Alagnak</div></div>
+      <div class="activity"><div class="act-time">7:00 PM</div><div class="act-desc">Dinner at the lodge</div></div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header" onclick="toggleDay(this)">
+      <div class="day-num">5</div>
+      <div class="day-info"><div class="day-date">Wednesday, July 16</div><div class="day-title">Full Fishing Day – Trophy Hunting</div></div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="activity"><div class="act-time">7:00 AM</div><div class="act-desc">Breakfast</div></div>
+      <div class="activity"><div class="act-time">8:00 AM</div><div class="act-desc">Morning session: Target King Salmon – trophy fish can reach 40+ lbs</div></div>
+      <div class="activity"><div class="act-time">Noon</div><div class="act-desc">Shore lunch</div></div>
+      <div class="activity"><div class="act-time">1:00 PM</div><div class="act-desc">Afternoon: Guide's choice – they'll put you on whatever is running hot</div></div>
+      <div class="activity"><div class="act-time"></div><div class="act-desc">Ask about fly-fishing if interested – guides are excellent teachers for all skill levels</div></div>
+      <div class="activity"><div class="act-time">7:00 PM</div><div class="act-desc">Dinner at the lodge</div></div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header" onclick="toggleDay(this)">
+      <div class="day-num">6</div>
+      <div class="day-info"><div class="day-date">Thursday, July 17</div><div class="day-title">Full Fishing Day – Last Full Day</div></div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="activity"><div class="act-time">7:00 AM</div><div class="act-desc">Breakfast</div></div>
+      <div class="activity"><div class="act-time">8:00 AM</div><div class="act-desc">Morning: Fish for species you haven't targeted yet</div></div>
+      <div class="activity"><div class="act-time">Noon</div><div class="act-desc">Shore lunch</div></div>
+      <div class="activity"><div class="act-time">1:00 PM</div><div class="act-desc">Afternoon: Final push – fill out your catch (limit: 50 lbs per person)</div></div>
+      <div class="activity"><div class="act-time">5:00 PM</div><div class="act-desc">Discuss fish processing and shipping with lodge staff</div></div>
+      <div class="activity"><div class="act-time">7:00 PM</div><div class="act-desc">Farewell dinner – celebrate a great week</div></div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header" onclick="toggleDay(this)">
+      <div class="day-num">7</div>
+      <div class="day-info"><div class="day-date">Friday, July 18</div><div class="day-title">Departure Day</div></div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="activity"><div class="act-time">Morning</div><div class="act-desc">Final breakfast at the lodge</div></div>
+      <div class="activity"><div class="act-time"></div><div class="act-desc">Pack up, settle charges – lodge needs you out 2+ hrs before your AKN flight</div></div>
+      <div class="activity"><div class="act-time">~3:30 PM</div><div class="act-desc">Depart lodge by floatplane to King Salmon (Branch River Air)</div></div>
+      <div class="activity"><div class="act-time">5:59 PM</div><div class="act-desc">Depart AKN on Alaska Airlines AS 352 to Anchorage (TSA: check in 1 hr early)</div></div>
+      <div class="activity"><div class="act-time">7:08 PM</div><div class="act-desc">Arrive Anchorage – check into hotel</div></div>
+      <div class="activity"><div class="act-time">Evening</div><div class="act-desc">Last dinner in Alaska! Set alarm – tomorrow is a 7:00 AM departure</div></div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header" onclick="toggleDay(this)">
+      <div class="day-num">8</div>
+      <div class="day-info"><div class="day-date">Saturday, July 19</div><div class="day-title">Travel Home</div></div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="activity"><div class="act-time">~5:00 AM</div><div class="act-desc">Head to ANC airport (allow 2 hours for check-in and security)</div></div>
+      <div class="activity"><div class="act-time">7:00 AM</div><div class="act-desc">Depart ANC on American Airlines AA 407 to DFW</div></div>
+      <div class="activity"><div class="act-time">4:42 PM</div><div class="act-desc">Arrive Dallas/Fort Worth – welcome home!</div></div>
+      <div class="activity"><div class="act-time"></div><div class="act-desc">Processed fish ships separately via FedEx – typically arrives 2–3 days later</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SPECIES -->
+<div class="section" id="species">
+  <div class="section-title"><span class="icon">🐟</span> Target Species – Jul 13–18</div>
+  <div class="callout good"><span class="callout-icon">✓</span><span>Your dates land during a 3-species salmon overlap plus trophy Rainbow Trout. One of the best weeks on the Alagnak.</span></div>
+  <div class="species-card"><div class="species-icon">🔴</div><div class="species-info"><div class="species-name">Sockeye Salmon</div><div class="species-detail">July 4 – late July • Best week of the year – huge numbers on sandbars</div></div><div class="species-badge badge-peak">PEAK</div></div>
+  <div class="species-card"><div class="species-icon">👑</div><div class="species-info"><div class="species-name">King (Chinook) Salmon</div><div class="species-detail">July 5 – July 25 • Trophy fish to 40+ lbs – fished from boat in deeper water</div></div><div class="species-badge badge-peak">HEART OF RUN</div></div>
+  <div class="species-card"><div class="species-icon">🟣</div><div class="species-info"><div class="species-name">Chum Salmon</div><div class="species-detail">~July 10 – Aug • Aggressive fighters – entering river during your trip</div></div><div class="species-badge badge-good">EARLY RUN</div></div>
+  <div class="species-card"><div class="species-icon">🌈</div><div class="species-info"><div class="species-name">Rainbow Trout</div><div class="species-detail">Year-round • 20–22" avg, up to 27" – gorging on salmon eggs</div></div><div class="species-badge badge-peak">EXCELLENT</div></div>
+  <div class="species-card"><div class="species-icon">🔵</div><div class="species-info"><div class="species-name">Arctic Grayling</div><div class="species-detail">Year-round • Fun on light tackle between salmon sessions</div></div><div class="species-badge badge-good">GOOD</div></div>
+  <div class="species-card"><div class="species-icon">🟢</div><div class="species-info"><div class="species-name">Northern Pike</div><div class="species-detail">Year-round • Ask your guide for nearby pike water</div></div><div class="species-badge badge-available">AVAILABLE</div></div>
+</div>
+
+<!-- BUDGET -->
+<div class="section" id="budget">
+  <div class="section-title"><span class="icon">💰</span> Budget</div>
+  <div class="card">
+    <div class="budget-row"><span>Lodge: 5 Day Fishing Package</span><span>$5,400 x4 = $21,600 <span class="status status-invoiced">INVOICED</span></span></div>
+    <div class="budget-row"><span>5% group discount (4+ anglers)</span><span style="color:var(--green)">-$270 x4 = -$1,080</span></div>
+    <div class="budget-row"><span>Optional prepaid gratuity</span><span>$475 x4 = $1,900 <span class="status status-pending">OPTIONAL</span></span></div>
+    <div class="budget-row" style="font-weight:600;color:var(--navy)"><span>Lodge Total</span><span>$22,420</span></div>
+    <div class="budget-row"><span>Airfare: DFW ↔ ANC (American)</span><span>$1,022.70 x4 = $4,091 <span class="status status-booked">BOOKED</span></span></div>
+    <div class="budget-row"><span>Airfare: ANC ↔ AKN (Alaska)</span><span>~$350 x4 = ~$1,400 <span class="status status-booked">BOOKED</span></span></div>
+    <div class="budget-row"><span>Fishing license (7-day)</span><span>$45 x4 = $180</span></div>
+    <div class="budget-row"><span>King Salmon Stamp</span><span>$15 x4 = $60 <span class="status status-pending">WAIT</span></span></div>
+    <div class="budget-row"><span>Fish shipping (~50 lbs/person)</span><span>~$150 x4 = ~$600</span></div>
+    <div class="budget-row"><span>Hotel: Courtyard Marriott (Jul 12)</span><span>~$400 <span class="status status-booked">BOOKED</span></span></div>
+    <div class="budget-row"><span>Hotel: Return night (Jul 18)</span><span>~$400 <span class="status status-needed">NEED TO BOOK</span></span></div>
+    <div class="budget-row total"><span>Estimated Grand Total</span><span>~$29,951</span></div>
+  </div>
+  <div style="margin-top:.75rem">
+    <div class="card info" style="border-left-color:var(--teal)">
+      <div class="card-label">Payment Schedule</div>
+      <div class="card-detail" style="color:var(--text)">
+        <strong>Apr 25:</strong> $10,260 &nbsp;•&nbsp; <strong>May 18:</strong> $12,160 (final, includes optional gratuity)<br>
+        <span style="font-size:.8rem;color:var(--gray)">Credit card: add 3% processing fee. Bank transfer and check also accepted.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PACKING -->
+<div class="section" id="packing">
+  <div class="section-title"><span class="icon">🎒</span> Packing Checklist</div>
+  <div class="callout tip"><span class="callout-icon">⚠</span><span>Pack in a <strong>soft-sided duffel</strong> – floatplanes cannot fit hard-shell luggage. Lodge offers free laundry, so pack light.</span></div>
+
+  <div class="checklist-progress-text" id="pack-progress-text">0 / 0 packed</div>
+  <div class="checklist-progress"><div class="checklist-progress-bar" id="pack-progress-bar" style="width:0%"></div></div>
+
+  <div class="checklist-group"><h3>Clothing</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Waterproof hooded rain jacket</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Rain pants (waterproof)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Fleece / insulating mid-layers (x2)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Thermal undergarments</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Quick-dry pants (2–3 pair)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Long-sleeve moisture-wicking shirts (3–4)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Wool or synthetic socks (4–5 pairs – NO cotton)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Warm hat / beanie + baseball cap</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Gloves (cold morning boat rides)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Buff / neck gaiter</label></div>
+  </div>
+
+  <div class="checklist-group"><h3>Footwear</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Suitable wet-condition footwear</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Camp shoes / sandals for the lodge</label></div>
+  </div>
+
+  <div class="checklist-group"><h3>Fishing Gear <span style="font-weight:400;font-size:.8rem;color:var(--gray)">(lodge provides all gear free)</span></h3>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Polarized sunglasses (+ backup pair)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Personal rod/reel if preferred</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Personal flies or lures</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Fishing pliers / hemostats / nippers</label></div>
+  </div>
+
+  <div class="checklist-group"><h3>Essentials</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Government-issued photo ID</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Printed fishing license – TWO copies, separate bags</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Sunscreen SPF 50+</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Bug repellent – DEET 30%+ or Picaridin</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Head net for mosquitoes</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Medications / prescriptions</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Cash or checks for tips (if not prepaid)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Alcohol / tobacco (lodge does NOT provide)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Camera / GoPro + extra batteries</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Waterproof phone case or dry bag</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Power bank / portable charger</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Ear plugs (shared lodge)</label></div>
+  </div>
+
+  <div class="checklist-group"><h3 style="color:var(--red)">Do NOT Pack</h3>
+    <div class="check-item do-not-pack"><span style="color:var(--red);font-size:1.1rem;margin-right:.25rem">✗</span><label style="color:var(--red)">Hard-shell suitcase (won't fit on floatplane)</label></div>
+    <div class="check-item do-not-pack"><span style="color:var(--red);font-size:1.1rem;margin-right:.25rem">✗</span><label style="color:var(--red)">Cotton clothing (stays wet, gets cold)</label></div>
+    <div class="check-item do-not-pack"><span style="color:var(--red);font-size:1.1rem;margin-right:.25rem">✗</span><label style="color:var(--red)">Excessive gear (lodge provides everything)</label></div>
+  </div>
+</div>
+
+<!-- PRE-TRIP TO-DO -->
+<div class="section" id="todo">
+  <div class="section-title"><span class="icon">✅</span> Pre-Trip To-Do</div>
+
+  <div class="checklist-progress-text" id="todo-progress-text">0 / 0 done</div>
+  <div class="checklist-progress"><div class="checklist-progress-bar" id="todo-progress-bar" style="width:0%"></div></div>
+
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Email Pre-Visit form to Tony@AlagnakLodge.com (all 4 anglers)</label></div>
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Buy fishing licenses at www.adfg.alaska.gov/Store</label></div>
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Print TWO copies of each license – separate bags</label></div>
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Book Anchorage hotel for return night (July 18)</label></div>
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Make lodge payment #1: $10,260 by April 25</label></div>
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Make lodge payment #2: $12,160 by May 18</label></div>
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Purchase travel insurance (if desired)</label></div>
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Buy bug repellent (DEET 30%+) and head nets</label></div>
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Pack soft-sided duffel bags</label></div>
+  <div class="check-item" onclick="toggleCheck(this)" data-group="todo"><input type="checkbox"><label>Arrange someone at home to receive fish shipment (~Jul 20–21)</label></div>
+
+  <div style="margin-top:1rem">
+    <div class="callout tip"><span class="callout-icon">⚠</span><span><strong>King Salmon Stamp:</strong> Per the lodge – hold off purchasing. Can be added at the lodge if King fishing is productive. Saves $15/person if Kings aren't running strong.</span></div>
+  </div>
+</div>
+
+<!-- CONTACTS -->
+<div class="section" id="contacts">
+  <div class="section-title"><span class="icon">📞</span> Important Contacts</div>
+  <div class="contact-card"><div class="contact-icon">🏔️</div><div class="contact-info"><div class="contact-name">Alagnak Lodge</div><div class="contact-detail"><a href="tel:8082279301">(808) 227-9301</a> &nbsp;•&nbsp; Tony Behm</div></div></div>
+  <div class="contact-card"><div class="contact-icon">📧</div><div class="contact-info"><div class="contact-name">Lodge Email</div><div class="contact-detail"><a href="mailto:TonyBehm@AlagnakLodge.com">TonyBehm@AlagnakLodge.com</a> &nbsp;•&nbsp; Pre-visit form & questions</div></div></div>
+  <div class="contact-card"><div class="contact-icon">🛩️</div><div class="contact-info"><div class="contact-name">Branch River Air</div><div class="contact-detail"><a href="tel:9072463437">(907) 246-3437</a> &nbsp;•&nbsp; Floatplane: AKN ↔ Lodge</div></div></div>
+  <div class="contact-card"><div class="contact-icon">✈️</div><div class="contact-info"><div class="contact-name">American Airlines</div><div class="contact-detail"><a href="tel:18004337300">1-800-433-7300</a> &nbsp;•&nbsp; Conf: FFXTAY</div></div></div>
+  <div class="contact-card"><div class="contact-icon">✈️</div><div class="contact-info"><div class="contact-name">Alaska Airlines</div><div class="contact-detail"><a href="tel:18002527522">1-800-252-7522</a> &nbsp;•&nbsp; ANC ↔ AKN</div></div></div>
+  <div class="contact-card"><div class="contact-icon">🏨</div><div class="contact-info"><div class="contact-name">Courtyard Marriott ANC</div><div class="contact-detail">Conf# 84475616 &nbsp;•&nbsp; Jul 12–13</div></div></div>
+  <div class="contact-card"><div class="contact-icon">🎣</div><div class="contact-info"><div class="contact-name">ADF&G License Store</div><div class="contact-detail"><a href="https://www.adfg.alaska.gov/Store" target="_blank">www.adfg.alaska.gov/Store</a></div></div></div>
+</div>
+
+</div>
+
+<div class="footer">
+  Allison Family Alaska Fishing Trip &nbsp;•&nbsp; Alagnak Lodge &nbsp;•&nbsp; July 2026<br>
+  Tight lines and big fish!
+</div>
+
+<script>
+// Countdown
+function updateCountdown() {
+  const dep = new Date('2026-07-12T18:40:00-05:00'); // 6:40 PM CDT
+  const now = new Date();
+  const diff = dep - now;
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '0';
+    document.getElementById('cd-hrs').textContent = '0';
+    document.getElementById('cd-min').textContent = '0';
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  document.getElementById('cd-days').textContent = d;
+  document.getElementById('cd-hrs').textContent = h;
+  document.getElementById('cd-min').textContent = m;
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+// Day toggle
+function toggleDay(header) {
+  header.classList.toggle('collapsed');
+  const content = header.nextElementSibling;
+  content.classList.toggle('hidden');
+}
+
+// Checklist with memory
+function getStorage() {
+  try { return JSON.parse(sessionStorage.getItem('alaska-trip-checks') || '{}'); }
+  catch(e) { return {}; }
+}
+function saveStorage(data) {
+  try { sessionStorage.setItem('alaska-trip-checks', JSON.stringify(data)); } catch(e) {}
+}
+
+function toggleCheck(el) {
+  if (el.classList.contains('do-not-pack')) return;
+  const cb = el.querySelector('input[type="checkbox"]');
+  if (!cb) return;
+  cb.checked = !cb.checked;
+  el.classList.toggle('checked', cb.checked);
+
+  // Save state
+  const label = el.querySelector('label').textContent;
+  const data = getStorage();
+  data[label] = cb.checked;
+  saveStorage(data);
+
+  updateProgress();
+}
+
+function updateProgress() {
+  // Packing
+  const packItems = document.querySelectorAll('#packing .check-item:not(.do-not-pack) input[type="checkbox"]');
+  const packChecked = [...packItems].filter(c => c.checked).length;
+  document.getElementById('pack-progress-text').textContent = packChecked + ' / ' + packItems.length + ' packed';
+  document.getElementById('pack-progress-bar').style.width = (packItems.length ? (packChecked/packItems.length*100) : 0) + '%';
+
+  // Todo
+  const todoItems = document.querySelectorAll('#todo .check-item input[type="checkbox"]');
+  const todoChecked = [...todoItems].filter(c => c.checked).length;
+  document.getElementById('todo-progress-text').textContent = todoChecked + ' / ' + todoItems.length + ' done';
+  document.getElementById('todo-progress-bar').style.width = (todoItems.length ? (todoChecked/todoItems.length*100) : 0) + '%';
+}
+
+// Restore saved state on load
+window.addEventListener('DOMContentLoaded', function() {
+  const data = getStorage();
+  document.querySelectorAll('.check-item:not(.do-not-pack)').forEach(el => {
+    const label = el.querySelector('label');
+    const cb = el.querySelector('input[type="checkbox"]');
+    if (label && cb && data[label.textContent]) {
+      cb.checked = true;
+      el.classList.add('checked');
+    }
+  });
+  updateProgress();
+});
+
+// Nav active state
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+      const link = document.querySelector('.nav a[href="#' + e.target.id + '"]');
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
