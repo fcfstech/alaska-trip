@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lake Texoma Striper Day Trip – June 19, 2026</title>
+<style>
+:root {
+  --navy: #1B3A5C;
+  --teal: #2E75B6;
+  --accent: #D5E8F0;
+  --light: #F2F7FA;
+  --green: #2D8B4E;
+  --red: #C0392B;
+  --gray: #666;
+  --lgray: #eee;
+  --bg: #f8fafb;
+  --card: #fff;
+  --text: #333;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+  color:#fff; text-align:center; padding:3rem 1.5rem 2rem;
+  position:relative; overflow:hidden;
+}
+.hero::after {
+  content:''; position:absolute; bottom:-2px; left:0; right:0; height:40px;
+  background:var(--bg); border-radius:50% 50% 0 0 / 100% 100% 0 0;
+}
+.hero h1 { font-size:2.2rem; font-weight:800; letter-spacing:2px; margin-bottom:.25rem; }
+.hero .subtitle { font-size:1.3rem; opacity:.9; font-weight:300; }
+.hero .dates { font-size:1.1rem; opacity:.8; margin-top:.5rem; }
+.hero .group { font-size:.95rem; opacity:.7; margin-top:.75rem; }
+
+/* COUNTDOWN */
+.countdown-bar {
+  background:rgba(255,255,255,.15); border-radius:12px; padding:1rem 1.5rem;
+  margin:1.5rem auto 0; max-width:400px; backdrop-filter:blur(10px);
+}
+.countdown-bar .label { font-size:.8rem; text-transform:uppercase; letter-spacing:1px; opacity:.7; }
+.countdown-nums { display:flex; justify-content:center; gap:1.5rem; margin-top:.5rem; }
+.countdown-nums .unit { text-align:center; }
+.countdown-nums .num { font-size:1.8rem; font-weight:700; }
+.countdown-nums .lbl { font-size:.7rem; text-transform:uppercase; opacity:.7; }
+
+/* NAV */
+.nav { position:sticky; top:0; z-index:100; background:var(--card); border-bottom:1px solid var(--lgray); overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch; }
+.nav-inner { display:flex; padding:.5rem 1rem; gap:.5rem; }
+.nav a {
+  display:inline-block; padding:.5rem .75rem; border-radius:8px; text-decoration:none;
+  font-size:.8rem; font-weight:600; color:var(--teal); background:var(--light);
+  transition:all .2s; flex-shrink:0;
+}
+.nav a:hover, .nav a.active { background:var(--teal); color:#fff; }
+
+/* CONTAINER */
+.container { max-width:720px; margin:0 auto; padding:0 1rem 3rem; }
+
+/* SECTION */
+.section { margin-top:2rem; }
+.section-title {
+  font-size:1.3rem; font-weight:700; color:var(--navy); padding-bottom:.5rem;
+  border-bottom:3px solid var(--teal); margin-bottom:1rem; display:flex; align-items:center; gap:.5rem;
+}
+.section-title .icon { font-size:1.4rem; }
+
+/* CARDS */
+.card {
+  background:var(--card); border-radius:12px; padding:1.25rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); margin-bottom:1rem;
+  border-left:4px solid var(--teal);
+}
+.card.alert { border-left-color:var(--red); background:#fef5f5; }
+.card.success { border-left-color:var(--green); background:#f0faf4; }
+.card.warn { border-left-color:#e6a817; background:#fffdf0; }
+.card.info { border-left-color:var(--teal); background:#f0f7fc; }
+.card-label { font-size:.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--gray); font-weight:600; margin-bottom:.25rem; }
+.card-value { font-size:1rem; font-weight:600; color:var(--navy); }
+.card-detail { font-size:.85rem; color:var(--gray); margin-top:.15rem; }
+
+/* INFO GRID */
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+@media(max-width:500px) { .info-grid { grid-template-columns:1fr; } }
+.info-item { background:var(--light); border-radius:8px; padding:.75rem 1rem; }
+.info-item .label { font-size:.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--gray); font-weight:600; }
+.info-item .value { font-size:.95rem; font-weight:600; color:var(--navy); margin-top:.15rem; }
+
+/* DAY BLOCKS */
+.day-block { margin-bottom:1rem; }
+.day-header {
+  display:flex; align-items:center; gap:.75rem; padding:1rem 1.25rem;
+  background:var(--card); border-radius:12px 12px 0 0; cursor:pointer;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); user-select:none;
+  border-left:4px solid var(--teal); transition:all .2s;
+}
+.day-header:hover { background:var(--light); }
+.day-header.collapsed { border-radius:12px; }
+.day-num { font-size:1.5rem; font-weight:800; color:var(--teal); min-width:2.5rem; }
+.day-info { flex:1; }
+.day-date { font-size:.8rem; color:var(--gray); }
+.day-title { font-size:1rem; font-weight:700; color:var(--navy); }
+.day-toggle { font-size:1.2rem; color:var(--gray); transition:transform .3s; }
+.day-header.collapsed .day-toggle { transform:rotate(-90deg); }
+.day-content {
+  background:var(--card); border-radius:0 0 12px 12px; padding:0 1.25rem 1rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); border-left:4px solid var(--teal);
+  border-top:1px solid var(--lgray);
+}
+.day-content.hidden { display:none; }
+.activity { display:flex; gap:.75rem; padding:.6rem 0; border-bottom:1px solid var(--lgray); }
+.activity:last-child { border-bottom:none; }
+.act-time { font-size:.8rem; font-weight:700; color:var(--teal); min-width:5.5rem; flex-shrink:0; padding-top:.1rem; }
+.act-desc { font-size:.9rem; color:var(--text); }
+
+/* SPECIES / SPOT TABLE */
+.species-card {
+  background:var(--card); border-radius:12px; padding:1rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); margin-bottom:.5rem;
+  display:flex; align-items:center; gap:1rem;
+}
+.species-icon { font-size:1.5rem; }
+.species-info { flex:1; }
+.species-name { font-weight:700; color:var(--navy); font-size:.95rem; }
+.species-detail { font-size:.8rem; color:var(--gray); }
+.species-badge {
+  font-size:.7rem; font-weight:700; padding:.2rem .5rem; border-radius:4px;
+  text-transform:uppercase; letter-spacing:.5px; flex-shrink:0; text-align:center;
+}
+.badge-peak { background:#d4edda; color:#155724; }
+.badge-good { background:var(--accent); color:var(--teal); }
+.badge-available { background:var(--lgray); color:var(--gray); }
+
+/* CHECKLIST */
+.checklist-group { margin-bottom:1.5rem; }
+.checklist-group h3 { font-size:1rem; font-weight:700; color:var(--teal); margin-bottom:.5rem; }
+.check-item {
+  display:flex; align-items:flex-start; gap:.5rem; padding:.4rem 0;
+  cursor:pointer; user-select:none;
+}
+.check-item input { margin-top:.25rem; accent-color:var(--teal); width:18px; height:18px; flex-shrink:0; }
+.check-item label { font-size:.9rem; cursor:pointer; }
+.check-item.checked label { text-decoration:line-through; color:var(--gray); }
+.checklist-progress {
+  background:var(--lgray); border-radius:8px; height:8px; margin-bottom:1rem; overflow:hidden;
+}
+.checklist-progress-bar { height:100%; background:var(--teal); border-radius:8px; transition:width .3s; }
+.checklist-progress-text { font-size:.8rem; color:var(--gray); margin-bottom:.5rem; text-align:right; }
+
+/* CONTACTS */
+.contact-card {
+  background:var(--card); border-radius:12px; padding:1rem 1.25rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.08); margin-bottom:.5rem;
+  display:flex; align-items:center; gap:1rem;
+}
+.contact-icon { font-size:1.3rem; width:2.5rem; height:2.5rem; display:flex; align-items:center; justify-content:center; background:var(--light); border-radius:50%; flex-shrink:0; }
+.contact-info { flex:1; }
+.contact-name { font-weight:700; color:var(--navy); font-size:.95rem; }
+.contact-detail { font-size:.8rem; color:var(--gray); }
+.contact-detail a { color:var(--teal); text-decoration:none; }
+
+/* FOOTER */
+.footer { text-align:center; padding:2rem 1rem; color:var(--gray); font-size:.8rem; border-top:1px solid var(--lgray); margin-top:2rem; }
+
+/* CALLOUT */
+.callout { padding:1rem 1.25rem; border-radius:10px; margin-bottom:1rem; font-size:.9rem; display:flex; gap:.5rem; align-items:flex-start; }
+.callout.tip { background:#fff3cd; color:#856404; }
+.callout.important { background:#f8d7da; color:#721c24; }
+.callout.good { background:#d4edda; color:#155724; }
+.callout.info { background:#d1ecf1; color:#0c5460; }
+.callout-icon { font-size:1.1rem; flex-shrink:0; padding-top:.05rem; }
+
+/* SOURCES */
+.sources { font-size:.78rem; color:var(--gray); }
+.sources a { color:var(--teal); text-decoration:none; }
+.sources li { margin-bottom:.25rem; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>LAKE TEXOMA</h1>
+  <div class="subtitle">Striper Day Trip</div>
+  <div class="dates">Friday, June 19, 2026 &nbsp;•&nbsp; Cedar Mills Marina</div>
+  <div class="group">The Striper Capital of the World</div>
+  <div class="countdown-bar">
+    <div class="label">Countdown to Launch</div>
+    <div class="countdown-nums" id="countdown">
+      <div class="unit"><div class="num" id="cd-days">--</div><div class="lbl">Days</div></div>
+      <div class="unit"><div class="num" id="cd-hrs">--</div><div class="lbl">Hours</div></div>
+      <div class="unit"><div class="num" id="cd-min">--</div><div class="lbl">Min</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#overview">Overview</a>
+    <a href="#weather">Weather</a>
+    <a href="#launch">Launch</a>
+    <a href="#bait">Bait</a>
+    <a href="#spots">Spots</a>
+    <a href="#gear">Gear</a>
+    <a href="#regs">Regs</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#todo">Checklist</a>
+    <a href="#contacts">Contacts</a>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<div class="section" id="overview">
+  <div class="section-title"><span class="icon">📋</span> Trip Overview</div>
+  <div class="info-grid">
+    <div class="info-item"><div class="label">Lake</div><div class="value">Lake Texoma (TX/OK)</div></div>
+    <div class="info-item"><div class="label">Target</div><div class="value">Striped Bass</div></div>
+    <div class="info-item"><div class="label">Launch</div><div class="value">Cedar Mills Marina</div></div>
+    <div class="info-item"><div class="label">Address</div><div class="value">Gordonville, TX</div></div>
+    <div class="info-item"><div class="label">Water Temp</div><div class="value">~82°F (summer pattern)</div></div>
+    <div class="info-item"><div class="label">Lake Level</div><div class="value">~2 ft high &amp; stable</div></div>
+    <div class="info-item"><div class="label">Pattern</div><div class="value">Live shad, main lake</div></div>
+    <div class="info-item"><div class="label">Marina Phone</div><div class="value"><a href="tel:9035234222" style="color:var(--navy);text-decoration:none">(903) 523-4222</a></div></div>
+  </div>
+  <div style="margin-top:1rem">
+    <div class="callout good">
+      <span class="callout-icon">✓</span>
+      <span><strong>The plan in one line:</strong> Launch at Cedar Mills before daylight, throw a cast net for shad under the lights, then fish live bait on main-lake flats and channel edges (20–40 ft). Be on the water before first light.</span>
+    </div>
+  </div>
+</div>
+
+<!-- WEATHER -->
+<div class="section" id="weather">
+  <div class="section-title"><span class="icon">🌦️</span> Weather Watch — Check First!</div>
+  <div class="callout important">
+    <span class="callout-icon">⚠</span>
+    <span><strong>2-day-out forecast flags gusts ~25–27 mph and possible heavy rain/storms for Friday 6/19.</strong> The open west end gets rough and muddy in wind — re-check Thursday night and Friday pre-dawn before committing.</span>
+  </div>
+  <div class="card warn">
+    <div class="card-label">If it's windy / stormy</div>
+    <div class="card-detail" style="color:var(--text)">Fish the protected creek arms and coves (Soldier Creek) instead of the open flats. Keep an eye on radar — pop-up storms move fast on Texoma. Backup days if blown out: <strong>Thu 6/18</strong> or <strong>Sat 6/20</strong> may fish better.</div>
+  </div>
+  <div class="info-grid">
+    <div class="info-item"><div class="label">Refresh — Forecast</div><div class="value"><a href="https://weather.com/weather/tenday/l/Pottsboro+Texas+75076" target="_blank" style="color:var(--teal);text-decoration:none">weather.com (Pottsboro)</a></div></div>
+    <div class="info-item"><div class="label">Refresh — Wind</div><div class="value"><a href="https://windy.app/forecast2/spot/48771/Lake+Texoma+United+States" target="_blank" style="color:var(--teal);text-decoration:none">windy.app (Gordonville)</a></div></div>
+    <div class="info-item"><div class="label">Refresh — Radar</div><div class="value"><a href="https://www.kten.com/weather/" target="_blank" style="color:var(--teal);text-decoration:none">KTEN Texoma</a></div></div>
+    <div class="info-item"><div class="label">Air Temp</div><div class="value">Low-to-mid 80s°F</div></div>
+  </div>
+</div>
+
+<!-- LAUNCH -->
+<div class="section" id="launch">
+  <div class="section-title"><span class="icon">🚤</span> Getting There &amp; Launch</div>
+  <div class="card info">
+    <div class="card-label">Route — coming north on I-35</div>
+    <div class="card-value">I-35 → US-82 East (Gainesville exit) → Whitesboro → north on US-377 → west on FM 406</div>
+    <div class="card-detail">Punch "Cedar Mills Marina, Gordonville TX" into GPS. About 25–35 min off the interstate.</div>
+  </div>
+  <div class="info-grid">
+    <div class="info-item"><div class="label">Ramp</div><div class="value">No-wake zone, easy load/unload</div></div>
+    <div class="info-item"><div class="label">Boat Size</div><div class="value">Rated up to ~20 ft</div></div>
+    <div class="info-item"><div class="label">Ships Store Hours</div><div class="value">Mon–Sat 8a–5p · Sun 8a–3p</div></div>
+    <div class="info-item"><div class="label">Heads up</div><div class="value">Store opens AFTER launch</div></div>
+  </div>
+  <div class="callout tip"><span class="callout-icon">⚠</span><span>The store opens at <strong>8 a.m.</strong> — after your pre-dawn launch. Handle your launch fee, parking pass, and ice the evening before, or call <a href="tel:9035234222" style="color:#856404"><strong>903-523-4222</strong></a> ahead.</span></div>
+  <div class="card">
+    <div class="card-label">Alternative (classic mid-lake / dam grounds)</div>
+    <div class="card-detail" style="color:var(--text)">Highport Marina (Pottsboro) or Grandpappy Point (Denison) sit near the famous striper water by the dam — but they're a good hour-plus farther east of I-35. For a day trip off I-35, Cedar Mills is the efficient call and the west end holds plenty of fish this time of year.</div>
+  </div>
+</div>
+
+<!-- BAIT -->
+<div class="section" id="bait">
+  <div class="section-title"><span class="icon">🪣</span> Bait — Catch Your Own Shad</div>
+  <div class="callout important"><span class="callout-icon">⚠</span><span>Don't count on buying live bait. Cedar Mills' live-bait references are tied to <strong>guide charters</strong>, not retail, and the store opens after you launch. <strong>Plan to cast-net your own shad.</strong> Call 903-523-4222 Thursday to confirm if they sell shad and when.</span></div>
+  <div class="card">
+    <div class="card-label">Where &amp; When</div>
+    <div class="card-detail" style="color:var(--text)">Throw the cast net <strong>before daylight</strong> at marina/dock lights and creek &amp; cove mouths next to deeper water. Use the <strong>trolling motor</strong> to ease in — the big motor spooks and scatters the school.</div>
+  </div>
+  <div class="info-grid">
+    <div class="info-item"><div class="label">Cast Net</div><div class="value">8 ft · ~3/8" mesh · ~3/4 lb/ft</div></div>
+    <div class="info-item"><div class="label">Keep Bait Alive</div><div class="value">Aerator + salt + block ice + defoamer</div></div>
+  </div>
+  <div class="callout tip"><span class="callout-icon">🧊</span><span>Water's ~82°F — heat kills bait fast. Block ice in the tank is the #1 thing that makes or breaks a live-bait day.</span></div>
+</div>
+
+<!-- SPOTS -->
+<div class="section" id="spots">
+  <div class="section-title"><span class="icon">📍</span> Where to Fish — West End</div>
+  <div class="species-card"><div class="species-icon">🌊</div><div class="species-info"><div class="species-name">Flats next to the main river channel</div><div class="species-detail">#1 summer pattern — live shad over flats where they drop into the channel</div></div><div class="species-badge badge-peak">START HERE</div></div>
+  <div class="species-card"><div class="species-icon">🌉</div><div class="species-info"><div class="species-name">Channel near Roosevelt Bridge</div><div class="species-detail">Flats meeting ledges &amp; cliffs — graph the edges for bait &amp; fish</div></div><div class="species-badge badge-good">PRIME</div></div>
+  <div class="species-card"><div class="species-icon">🌅</div><div class="species-info"><div class="species-name">Washita Flats (E. of Soldier Creek)</div><div class="species-detail">First-light schoolers busting on top — throw topwater / fluke</div></div><div class="species-badge badge-good">DAWN</div></div>
+  <div class="species-card"><div class="species-icon">🐦</div><div class="species-info"><div class="species-name">Diving seagulls — anywhere</div><div class="species-detail">Birds = stripers pushing shad up. Run to them; topwater or shad burned just under surface</div></div><div class="species-badge badge-available">RUN &amp; GUN</div></div>
+  <div class="callout info"><span class="callout-icon">🎯</span><span><strong>Game plan:</strong> First light = flats/channel edges &amp; any surface action. Once the sun's up, slide to deeper channel ledges (20–40 ft) and graph-and-drop live shad onto the schools you mark. Move every 30–45 min if no marks or bites.</span></div>
+</div>
+
+<!-- GEAR -->
+<div class="section" id="gear">
+  <div class="section-title"><span class="icon">🎯</span> Rigs &amp; Lures</div>
+  <div class="card success">
+    <div class="card-label">Live Bait Rig</div>
+    <div class="card-value">14–20 lb mono · Carolina rig</div>
+    <div class="card-detail">Egg sinker → heavy swivel → leader → <strong>circle hook</strong>. Let the fish load up — don't swing hard.</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Artificial Backup</div>
+    <div class="card-value">For surface action or if bait fails</div>
+    <div class="card-detail">5" Zoom Fluke (Baby Bass) · 4" sassy shad (white/glow or chartreuse) on 3/4–1 oz white jighead · swimbaits on points.</div>
+  </div>
+</div>
+
+<!-- REGS -->
+<div class="section" id="regs">
+  <div class="section-title"><span class="icon">📜</span> Regulations — Texoma is Special</div>
+  <div class="card alert">
+    <div class="card-label">License</div>
+    <div class="card-value">Lake Texoma License Endorsement (~$12)</div>
+    <div class="card-detail">Texoma is a border lake. The endorsement lets you fish both TX + OK water on one license. A standard Texas license covers <strong>Texas water only</strong>.</div>
+  </div>
+  <div class="card warn">
+    <div class="card-label">Striper Limit (Texoma-specific)</div>
+    <div class="card-value">10 per day — no more than 2 over 20"</div>
+    <div class="card-detail">Different from other Texas lakes. Know it before you cull.</div>
+  </div>
+</div>
+
+<!-- SCHEDULE -->
+<div class="section" id="schedule">
+  <div class="section-title"><span class="icon">📅</span> Schedule — Friday, June 19</div>
+  <div class="day-block">
+    <div class="day-header" onclick="toggleDay(this)">
+      <div class="day-num">🎣</div>
+      <div class="day-info"><div class="day-date">Friday, June 19, 2026</div><div class="day-title">Texoma Striper Day — tap to expand</div></div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="activity"><div class="act-time">3:30–4:00a</div><div class="act-desc">Arrive Cedar Mills, launch in the dark. Bait tank running with ice + salt.</div></div>
+      <div class="activity"><div class="act-time">4:00–5:15a</div><div class="act-desc">Cast net for shad under marina/dock lights &amp; creek mouths. Fill the tank.</div></div>
+      <div class="activity"><div class="act-time">5:15–6:00a</div><div class="act-desc">Run to first flat/channel edge. Set up by first light (~6:15).</div></div>
+      <div class="activity"><div class="act-time">6:00–9:30a</div><div class="act-desc"><strong>PRIME WINDOW</strong> — live shad on flats/edges 20–40 ft. Hit surface schoolers with the fluke. Move if no bites in 30–45 min.</div></div>
+      <div class="activity"><div class="act-time">9:30–12:00p</div><div class="act-desc">Sun up → fish deeper. Graph channel ledges, drop bait to marked schools.</div></div>
+      <div class="activity"><div class="act-time">12:00–1:00p</div><div class="act-desc">Lunch / re-net bait if the tank's thinning / reposition.</div></div>
+      <div class="activity"><div class="act-time">1:00–3:00p</div><div class="act-desc">Work deeper structure; afternoon bite picks up with wind or cloud cover.</div></div>
+      <div class="activity"><div class="act-time">3:00–4:00p</div><div class="act-desc">Last drifts, load up, beat the heat &amp; the drive home.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="todo">
+  <div class="section-title"><span class="icon">✅</span> Night-Before Checklist</div>
+  <div class="checklist-progress-text" id="todo-progress-text">0 / 0 done</div>
+  <div class="checklist-progress"><div class="checklist-progress-bar" id="todo-progress-bar" style="width:0%"></div></div>
+
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Texoma fishing license + endorsement</label></div>
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Cast net (8 ft, 3/8" mesh)</label></div>
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Bait tank + aerator + block ice + salt + defoamer</label></div>
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Circle hooks / egg sinkers / swivels / leader</label></div>
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>14–20 lb rods rigged</label></div>
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Flukes / sassy shad / swimbaits / jigheads</label></div>
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Cooler + ice for the catch</label></div>
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Sun protection + rain gear</label></div>
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Call Cedar Mills 903-523-4222 (ramp / bait / pass)</label></div>
+  <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Re-check weather + radar</label></div>
+</div>
+
+<!-- CONTACTS -->
+<div class="section" id="contacts">
+  <div class="section-title"><span class="icon">📞</span> Contacts &amp; Links</div>
+  <div class="contact-card"><div class="contact-icon">🚤</div><div class="contact-info"><div class="contact-name">Cedar Mills Marina &amp; Resort</div><div class="contact-detail"><a href="tel:9035234222">(903) 523-4222</a> &nbsp;•&nbsp; 500 Harbour View Rd, Gordonville, TX</div></div></div>
+  <div class="contact-card"><div class="contact-icon">🎣</div><div class="contact-info"><div class="contact-name">TX License Store</div><div class="contact-detail"><a href="https://tpwd.texas.gov/business/licenses/" target="_blank">tpwd.texas.gov/business/licenses</a> &nbsp;•&nbsp; Lake Texoma endorsement</div></div></div>
+  <div class="contact-card"><div class="contact-icon">🐟</div><div class="contact-info"><div class="contact-name">TFF Striper Forum</div><div class="contact-detail"><a href="https://texasfishingforum.com/forums/ubbthreads.php/forums/4/1/whites-hybrids-striper" target="_blank">Whites / Hybrids / Striper board</a></div></div></div>
+  <div class="contact-card"><div class="contact-icon">🌦️</div><div class="contact-info"><div class="contact-name">Weather &amp; Radar</div><div class="contact-detail"><a href="https://www.kten.com/weather/" target="_blank">KTEN</a> &nbsp;•&nbsp; <a href="https://windy.app/forecast2/spot/48771/Lake+Texoma+United+States" target="_blank">Windy</a> &nbsp;•&nbsp; <a href="https://weather.com/weather/tenday/l/Pottsboro+Texas+75076" target="_blank">Weather.com</a></div></div></div>
+</div>
+
+<!-- SOURCES -->
+<div class="section">
+  <div class="section-title"><span class="icon">🔗</span> Sources</div>
+  <ul class="sources" style="list-style:none;padding-left:0">
+    <li><a href="https://tpwd.texas.gov/fishboat/fish/recreational/lakes/texoma/" target="_blank">TPWD — Fishing Lake Texoma</a></li>
+    <li><a href="https://texomaconnect.com/lake-texoma-fishing-reports/" target="_blank">Texoma Connect — Fishing Reports (incl. ODWC 6/11/2026)</a></li>
+    <li><a href="https://www.cedarmills.com/" target="_blank">Cedar Mills Marina &amp; Resort</a></li>
+    <li><a href="https://txfishingguide.com/how-to-catch-and-keep-shad-alive/" target="_blank">How to Catch &amp; Keep Shad Alive — Texoma Striper Guide</a></li>
+    <li><a href="https://norrik.com/fishing-spots/texas/lake-texoma/" target="_blank">Norrik — Lake Texoma west-end fishing spots</a></li>
+  </ul>
+</div>
+
+</div>
+
+<div class="footer">
+  Lake Texoma Striper Day Trip &nbsp;•&nbsp; June 19, 2026<br>
+  Tight lines and big stripers!
+</div>
+
+<script>
+// Countdown to launch (3:30 AM CDT, June 19, 2026)
+function updateCountdown() {
+  const dep = new Date('2026-06-19T03:30:00-05:00');
+  const now = new Date();
+  const diff = dep - now;
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '0';
+    document.getElementById('cd-hrs').textContent = '0';
+    document.getElementById('cd-min').textContent = '0';
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  document.getElementById('cd-days').textContent = d;
+  document.getElementById('cd-hrs').textContent = h;
+  document.getElementById('cd-min').textContent = m;
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+// Day toggle
+function toggleDay(header) {
+  header.classList.toggle('collapsed');
+  const content = header.nextElementSibling;
+  content.classList.toggle('hidden');
+}
+
+// Checklist with memory
+function getStorage() {
+  try { return JSON.parse(sessionStorage.getItem('texoma-trip-checks') || '{}'); }
+  catch(e) { return {}; }
+}
+function saveStorage(data) {
+  try { sessionStorage.setItem('texoma-trip-checks', JSON.stringify(data)); } catch(e) {}
+}
+function toggleCheck(el) {
+  const cb = el.querySelector('input[type="checkbox"]');
+  if (!cb) return;
+  cb.checked = !cb.checked;
+  el.classList.toggle('checked', cb.checked);
+  const label = el.querySelector('label').textContent;
+  const data = getStorage();
+  data[label] = cb.checked;
+  saveStorage(data);
+  updateProgress();
+}
+function updateProgress() {
+  const todoItems = document.querySelectorAll('#todo .check-item input[type="checkbox"]');
+  const todoChecked = [...todoItems].filter(c => c.checked).length;
+  document.getElementById('todo-progress-text').textContent = todoChecked + ' / ' + todoItems.length + ' done';
+  document.getElementById('todo-progress-bar').style.width = (todoItems.length ? (todoChecked/todoItems.length*100) : 0) + '%';
+}
+
+// Restore saved state on load
+window.addEventListener('DOMContentLoaded', function() {
+  const data = getStorage();
+  document.querySelectorAll('.check-item').forEach(el => {
+    const label = el.querySelector('label');
+    const cb = el.querySelector('input[type="checkbox"]');
+    if (label && cb && data[label.textContent]) {
+      cb.checked = true;
+      el.classList.add('checked');
+    }
+  });
+  updateProgress();
+});
+
+// Nav active state
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+      const link = document.querySelector('.nav a[href="#' + e.target.id + '"]');
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
