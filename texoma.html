@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lake Texoma Striper Day Trip – June 19, 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root {
   --navy: #1B3A5C;
@@ -303,6 +305,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <div class="section" id="spots">
   <div class="section-title"><span class="icon">📍</span> Where to Fish — West End</div>
   <div class="callout info"><span class="callout-icon">📡</span><span><strong>GPS coordinates (decimal degrees, WGS84)</strong> — punch these straight into your fish finder or phone. They mark the general area; use your graph to dial in once on-site.</span></div>
+  <div id="spot-map" style="height:400px;border-radius:12px;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,.08);z-index:0;"></div>
   <div class="species-card"><div class="species-icon">🌊</div><div class="species-info"><div class="species-name">Flats next to the main river channel</div><div class="species-detail">#1 summer pattern — live shad over flats where they drop into the channel (20–40 ft)</div><div class="species-detail" style="margin-top:.35rem;font-family:'Courier New',monospace;color:var(--teal);font-weight:700;font-size:.85rem">33.8550, &minus;96.8000</div></div><div class="species-badge badge-peak">START HERE</div></div>
   <div class="species-card"><div class="species-icon">🌉</div><div class="species-info"><div class="species-name">Channel near Willis Bridge (US-377)</div><div class="species-detail">Flats meeting ledges &amp; cliffs — graph the edges for bait &amp; fish</div><div class="species-detail" style="margin-top:.35rem;font-family:'Courier New',monospace;color:var(--teal);font-weight:700;font-size:.85rem">33.8740, &minus;96.8340</div></div><div class="species-badge badge-good">PRIME</div></div>
   <div class="species-card"><div class="species-icon">🌅</div><div class="species-info"><div class="species-name">Washita Flats (E. of Soldier Creek)</div><div class="species-detail">First-light schoolers busting on top — throw topwater / fluke. OK side, ~20 min run N from Cedar Mills</div><div class="species-detail" style="margin-top:.35rem;font-family:'Courier New',monospace;color:var(--teal);font-weight:700;font-size:.85rem">33.9200, &minus;96.6500</div></div><div class="species-badge badge-good">DAWN</div></div>
@@ -491,6 +494,42 @@ const observer = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.3 });
 document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+// Spot map
+(function() {
+  var map = L.map('spot-map', { scrollWheelZoom: false }).setView([33.885, -96.75], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+  }).addTo(map);
+
+  var spots = [
+    { lat:33.8335, lng:-96.8116, name:'Cedar Mills Marina (Launch)', icon:'🚤', color:'#1B3A5C',
+      desc:'500 Harbour View Rd, Gordonville TX' },
+    { lat:33.8550, lng:-96.8000, name:'Main Channel Flats', icon:'🌊', color:'#C0392B',
+      desc:'#1 summer pattern — live shad over flats (20–40 ft)' },
+    { lat:33.8740, lng:-96.8340, name:'Willis Bridge (US-377)', icon:'🌉', color:'#C0392B',
+      desc:'Flats meeting ledges & cliffs — graph the edges' },
+    { lat:33.9200, lng:-96.6500, name:'Washita Flats', icon:'🌅', color:'#e6a817',
+      desc:'First-light schoolers — topwater / fluke. OK side' },
+    { lat:33.9210, lng:-96.6765, name:'Soldier Creek (Shelter)', icon:'🏕️', color:'#2D8B4E',
+      desc:'Protected creek arms — wind refuge' }
+  ];
+
+  spots.forEach(function(s) {
+    var pin = L.divIcon({
+      className: '',
+      html: '<div style="background:'+s.color+';color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.3);border:2px solid #fff;">'+s.icon+'</div>',
+      iconSize: [32, 32], iconAnchor: [16, 16]
+    });
+    L.marker([s.lat, s.lng], { icon: pin })
+      .addTo(map)
+      .bindPopup('<strong>'+s.name+'</strong><br>'+s.desc+'<br><span style="font-family:monospace;color:#2E75B6;font-weight:700">'+s.lat+', '+s.lng+'</span>');
+  });
+
+  // fit all markers
+  var group = L.featureGroup(spots.map(function(s){ return L.marker([s.lat, s.lng]); }));
+  map.fitBounds(group.getBounds().pad(0.15));
+})();
 </script>
 </body>
 </html>
