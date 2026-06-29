@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lake Texoma Striper Trip – June 29–30, 2026</title>
+<style>
+  :root{
+    --bg:#0a1622; --bg2:#0f2236; --card:#13283f; --card2:#16314c;
+    --ink:#eaf2fb; --muted:#9db4cd; --line:#214a6e;
+    --accent:#34c3ff; --accent2:#1b89c6; --gold:#ffcf5c;
+    --go:#36d399; --warn:#ffb454; --bad:#ff6b6b;
+    --shadow:0 6px 22px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(170deg,var(--bg),var(--bg2)); color:var(--ink); line-height:1.5;
+  }
+  a{color:var(--accent)}
+  .wrap{max-width:920px;margin:0 auto;padding:0 16px}
+
+  /* Hero */
+  header.hero{
+    text-align:center; padding:48px 16px 30px;
+    background:
+      radial-gradient(1200px 400px at 50% -120px, rgba(52,195,255,.18), transparent 70%),
+      linear-gradient(180deg, rgba(13,35,56,.6), transparent);
+    border-bottom:1px solid var(--line);
+  }
+  .hero h1{font-size:clamp(38px,9vw,72px); letter-spacing:3px; margin:0; font-weight:800;
+    background:linear-gradient(90deg,#7fe0ff,#34c3ff,#ffcf5c); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .hero .sub{font-size:clamp(16px,4vw,22px); color:var(--gold); margin-top:6px; letter-spacing:1px; font-weight:600}
+  .hero .date{color:var(--muted); margin-top:8px; font-size:15px}
+  .hero .tag{color:var(--muted); font-style:italic; margin-top:4px; font-size:14px}
+
+  /* Countdown */
+  .countdown{display:flex; justify-content:center; gap:10px; margin:22px 0 4px; flex-wrap:wrap}
+  .cd-box{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:10px 14px; min-width:74px; box-shadow:var(--shadow)}
+  .cd-box .n{font-size:30px; font-weight:800; color:var(--accent)}
+  .cd-box .l{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px}
+  .cd-label{text-align:center;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:2px;margin-top:14px}
+
+  /* Nav */
+  nav{position:sticky; top:0; z-index:30; background:rgba(10,22,34,.92); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line); padding:8px 0; overflow-x:auto; white-space:nowrap}
+  nav .wrap{display:flex; gap:6px}
+  nav a{color:var(--muted); text-decoration:none; font-size:13px; padding:7px 11px; border-radius:8px; font-weight:600}
+  nav a:hover{background:var(--card); color:var(--ink)}
+
+  section{padding:30px 0 6px}
+  h2{font-size:24px; margin:6px 0 14px; display:flex; align-items:center; gap:8px}
+  h3{font-size:16px;color:var(--gold);margin:18px 0 8px}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow); margin-bottom:14px}
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}}
+  .kv{background:var(--card2); border:1px solid var(--line); border-radius:10px; padding:10px 12px}
+  .kv .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  .kv .v{font-size:15px;font-weight:600;margin-top:2px}
+
+  .pill{display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; letter-spacing:.5px}
+  .pill.go{background:rgba(54,211,153,.18); color:var(--go); border:1px solid rgba(54,211,153,.4)}
+  .pill.warn{background:rgba(255,180,84,.16); color:var(--warn); border:1px solid rgba(255,180,84,.4)}
+  .pill.bad{background:rgba(255,107,107,.16); color:var(--bad); border:1px solid rgba(255,107,107,.4)}
+  .pill.blue{background:rgba(52,195,255,.16); color:var(--accent); border:1px solid rgba(52,195,255,.4)}
+
+  .note{border-left:3px solid var(--accent); background:rgba(52,195,255,.07); padding:10px 12px; border-radius:0 8px 8px 0; margin:10px 0; font-size:14px}
+  .note.warn{border-left-color:var(--warn); background:rgba(255,180,84,.07)}
+  .note.bad{border-left-color:var(--bad); background:rgba(255,107,107,.08)}
+  .note.go{border-left-color:var(--go); background:rgba(54,211,153,.07)}
+
+  /* Weather day cards */
+  .days{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:560px){.days{grid-template-columns:1fr}}
+  .day{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+  .day .icon{font-size:34px}
+  .day .name{font-weight:700;margin-top:4px}
+  .day .desc{font-size:13px;color:var(--muted);margin:8px 0}
+
+  /* Spots */
+  .spot{display:flex;gap:12px;align-items:flex-start;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+  .spot .ico{font-size:26px;line-height:1}
+  .spot .body{flex:1}
+  .spot .title{font-weight:700}
+  .spot .gps{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:var(--accent);margin-top:3px}
+  .spot .d{font-size:13px;color:var(--muted);margin-top:3px}
+
+  /* Schedule */
+  .sched{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .srow{display:flex;gap:0;border-top:1px solid var(--line)}
+  .srow:first-child{border-top:none}
+  .srow .t{flex:0 0 116px;background:var(--card2);padding:10px 12px;font-weight:700;font-size:13px;color:var(--gold)}
+  .srow .a{padding:10px 12px;font-size:14px}
+
+  /* Checklist */
+  .todo label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:7px;background:var(--card2);cursor:pointer;font-size:14px}
+  .todo input{margin-top:3px;width:17px;height:17px;accent-color:var(--accent)}
+  .todo .prog{font-size:12px;color:var(--muted);margin-bottom:8px}
+
+  .map-btn{display:inline-block;margin-top:6px;background:var(--accent2);color:#fff;text-decoration:none;padding:9px 14px;border-radius:9px;font-weight:700;font-size:14px}
+  .src li{margin:5px 0;font-size:14px}
+  footer{text-align:center;color:var(--muted);padding:30px 16px 50px;border-top:1px solid var(--line);margin-top:24px;font-size:14px}
+  .heart{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>LAKE TEXOMA</h1>
+    <div class="sub">Striper Trip — 2 Days</div>
+    <div class="date">Monday–Tuesday • June 29–30, 2026 • Cedar Mills (SW Launch)</div>
+    <div class="tag">The Striper Capital of the World</div>
+
+    <div class="cd-label">Countdown to Launch</div>
+    <div class="countdown" id="cd">
+      <div class="cd-box"><div class="n" id="cd-d">--</div><div class="l">Days</div></div>
+      <div class="cd-box"><div class="n" id="cd-h">--</div><div class="l">Hours</div></div>
+      <div class="cd-box"><div class="n" id="cd-m">--</div><div class="l">Min</div></div>
+    </div>
+  </div>
+</header>
+
+<nav><div class="wrap">
+  <a href="#overview">Overview</a>
+  <a href="#weather">Weather</a>
+  <a href="#launch">Launch</a>
+  <a href="#bait">Bait</a>
+  <a href="#spots">Spots</a>
+  <a href="#gear">Gear</a>
+  <a href="#regs">Regs</a>
+  <a href="#schedule">Schedule</a>
+  <a href="#todo">Checklist</a>
+  <a href="#contacts">Contacts</a>
+</div></nav>
+
+<main class="wrap">
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <h2>📋 Trip Overview</h2>
+  <div class="card">
+    <div class="grid">
+      <div class="kv"><div class="k">Lake</div><div class="v">Lake Texoma (TX/OK)</div></div>
+      <div class="kv"><div class="k">Target</div><div class="v">Striped Bass</div></div>
+      <div class="kv"><div class="k">Launch</div><div class="v">Cedar Mills (SW end)</div></div>
+      <div class="kv"><div class="k">Address</div><div class="v">Gordonville, TX</div></div>
+      <div class="kv"><div class="k">Days</div><div class="v">Mon &amp; Tue, Jun 29–30</div></div>
+      <div class="kv"><div class="k">Pattern</div><div class="v">Early-summer transition</div></div>
+      <div class="kv"><div class="k">Best Day</div><div class="v">Tuesday (calmer wind)</div></div>
+      <div class="kv"><div class="k">Marina Phone</div><div class="v"><a href="tel:9035234222">(903) 523-4222</a></div></div>
+    </div>
+    <div class="note go"><strong>The plan in one line:</strong> Launch at Cedar Mills before first light, throw topwater on points, then drop live shad over river-channel edges &amp; the deep water near the dam. It's a hot week — fish hard in the cool early hours and beat the midday heat.</div>
+  </div>
+</section>
+
+<!-- WEATHER -->
+<section id="weather">
+  <h2>🌦️ Weather Watch <span style="font-size:13px;color:var(--muted);font-weight:400">— updated Sun 6/28</span></h2>
+  <div class="card">
+    <div class="days">
+      <div class="day">
+        <div class="icon">🌤️</div>
+        <div class="name">Mon, Jun 29 — Day 1</div>
+        <div class="desc">Mix of sun &amp; clouds · high <strong>97°F</strong>, low 75°F · only 6% rain · S wind ~19 mph · UV 10 (very high)</div>
+        <span class="pill warn">HOT — GO EARLY</span>
+      </div>
+      <div class="day">
+        <div class="icon">☀️</div>
+        <div class="name">Tue, Jun 30 — Day 2</div>
+        <div class="desc">Sunny · high <strong>95°F</strong>, low 76°F · 6% rain · S wind ~14 mph · UV 10 (very high)</div>
+        <span class="pill go">CALMER WIND — BEST BET</span>
+      </div>
+    </div>
+    <div class="note bad"><strong>Heat is the story now, not storms.</strong> The wet pattern cleared out — both days are hot, sunny, and humid with highs in the mid-to-upper 90s and a heat index well over 100°F by afternoon. Rain chances are near zero. Fish the cool early hours hard, then get off the water or into shade by early afternoon.</div>
+    <div class="note warn"><strong>Wind:</strong> Monday's south wind (~19 mph, gusting higher) will stack a chop on open water — the long run to the dam is doable but bumpy. <strong>Tuesday is calmer (~14 mph)</strong>, making it the better day for a longer run or fishing exposed main-lake structure.</div>
+    <div class="note"><strong>Stay safe in the heat:</strong> bring far more water than you think you need, electrolytes, sun shirt, hat, and high-SPF sunscreen. UV index is 10 (very high) both days. Watch yourself and anyone aboard for cramps, dizziness, or nausea.</div>
+    <h3>Refresh links</h3>
+    <div class="grid">
+      <div class="kv"><div class="k">NWS Forecast</div><div class="v"><a href="https://forecast.weather.gov/MapClick.php?lat=33.746&lon=-96.57">forecast.weather.gov</a></div></div>
+      <div class="kv"><div class="k">Radar</div><div class="v"><a href="https://www.kten.com/weather/">KTEN Texoma</a></div></div>
+      <div class="kv"><div class="k">Wind</div><div class="v"><a href="https://windy.app/forecast2/spot/48771/Lake+Texoma+United+States">windy.app (Gordonville)</a></div></div>
+      <div class="kv"><div class="k">10-Day</div><div class="v"><a href="https://weather.com/weather/tenday/l/Pottsboro+Texas+75076">weather.com (Pottsboro)</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LAUNCH -->
+<section id="launch">
+  <h2>🚤 Launch — Coming From the Southwest</h2>
+  <div class="card">
+    <p style="margin-top:0">Coming from the SW, <strong>Cedar Mills</strong> is the efficient call — it sits on the Texas side at the southwest end, so you skip a long cross-lake run. The river-channel structure right off the ramp holds plenty of fish this time of year.</p>
+    <div class="grid">
+      <div class="kv"><div class="k">Ramp</div><div class="v">Cedar Mills Boat Ramp</div></div>
+      <div class="kv"><div class="k">Coordinates</div><div class="v">33.8295, −96.8114</div></div>
+      <div class="kv"><div class="k">Store</div><div class="v">Opens AFTER pre-dawn launch</div></div>
+      <div class="kv"><div class="k">Heads Up</div><div class="v">Handle fee/pass/ice night before</div></div>
+    </div>
+    <div class="note warn">The ships store opens later in the morning — <strong>after</strong> your pre-dawn launch. Handle your launch fee, parking pass, and ice the evening before, or call <a href="tel:9035234222">903-523-4222</a> ahead. Confirm current launch cost &amp; ramp conditions at <a href="https://www.cedarmills.com/launch-ramp/">cedarmills.com</a>.</div>
+    <h3>Alternative (classic mid-lake / dam grounds)</h3>
+    <p style="font-size:14px;color:var(--muted);margin:0">Highport / Lighthouse (Pottsboro) or Grandpappy Point (Denison) sit near the famous striper water by the dam — but they're a good hour-plus farther east. From the SW, Cedar Mills is the smart launch.</p>
+    <a class="map-btn" href="https://www.google.com/maps/search/?api=1&query=Cedar+Mills+Boat+Ramp+Gordonville+TX">Open in Google Maps</a>
+
+    <h3>⏱️ Timing — from Argyle, TX</h3>
+    <div class="sched">
+      <div class="srow"><div class="t">4:00 AM</div><div class="a"><strong>Leave Argyle.</strong> Head north on US-377 (~1 hr 10 min drive) + buffer for a gas / ice / bait stop.</div></div>
+      <div class="srow"><div class="t">5:15 AM</div><div class="a"><strong>Arrive ramp.</strong> Back in, rig rods, load ice &amp; bait. Store isn't open yet — handle fee/pass the night before.</div></div>
+      <div class="srow"><div class="t">5:45 AM</div><div class="a"><strong>On the water.</strong> Be running by first light (~5:50a) to throw topwater before the heat. Sunrise 6:18a.</div></div>
+    </div>
+    <div class="note">Route: US-377 N straight up through Pilot Point, Tioga &amp; Whitesboro to Gordonville, then E on Cedar Mills Rd ~2.5 mi to the ramp. Tuesday's a hair later on light (sunrise 6:19a) — same plan.</div>
+  </div>
+</section>
+
+<!-- BAIT -->
+<section id="bait">
+  <h2>🪣 Bait — Where to Launch the Bait Hunt</h2>
+  <div class="card">
+    <div class="note warn"><strong>Bait can be the hard part this time of year.</strong> Catching shad has been tough lately. Two routes: net your own early near Cedar Mills, or call a marina ahead to confirm live shad before you drive over.</div>
+
+    <h3>1) Net your own (fastest &amp; free)</h3>
+    <p style="font-size:14px;margin-top:4px">Throw a cast net early for threadfin/gizzard shad in <strong>shaded cove pockets, bridge pilings, and creek mouths</strong> near deeper water around Cedar Mills. Use your graph to find the school first, then throw. Ease in on the trolling motor — the big motor scatters the school.</p>
+    <div class="spot">
+      <div class="ico">🪣</div>
+      <div class="body">
+        <div class="title">Bait netting — coves near Cedar Mills</div>
+        <div class="gps">33.8380, −96.8200</div>
+        <div class="d">Graph the school first, then throw. Budget 30–45 min.</div>
+      </div>
+    </div>
+
+    <h3>2) Buy live shad — call first</h3>
+    <div class="spot">
+      <div class="ico">⛽</div>
+      <div class="body">
+        <div class="title">Lake Texoma Marina (Whitesboro) — <span class="pill go">OPEN MON 8a</span></div>
+        <div class="gps">33.8676, −96.8939 · <a href="tel:8176827271">(817) 682-7271</a></div>
+        <div class="d">SW-side backup, open 8am Monday. Call to confirm live shad before driving.</div>
+      </div>
+    </div>
+    <div class="spot">
+      <div class="ico">🛥️</div>
+      <div class="body">
+        <div class="title">Cedar Bayou Marina (Gordonville) — <span class="pill bad">CLOSED MON</span></div>
+        <div class="gps">33.8422, −96.8504 · <a href="tel:9035234248">(903) 523-4248</a></div>
+        <div class="d">Closest marina to the ramp but closed Monday — Tuesday only, and call ahead.</div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:10px">
+      <div class="kv"><div class="k">Cast Net</div><div class="v">8 ft · ~3/8" mesh</div></div>
+      <div class="kv"><div class="k">Keep Bait Alive</div><div class="v">Aerator + salt + block ice + defoamer</div></div>
+    </div>
+    <div class="note">🧊 With highs near 97°F, the water's warm and bait dies fast in the heat. Block ice in the tank (plus salt + a little defoamer) is the #1 thing that makes or breaks a live-bait day — pack extra.</div>
+  </div>
+</section>
+
+<!-- SPOTS -->
+<section id="spots">
+  <h2>📍 Where to Fish</h2>
+  <div class="card">
+    <div class="note">📡 <strong>GPS coordinates (decimal degrees, WGS84)</strong> — punch these into your fish finder or phone. They mark the general area; use your graph to dial in once on-site.</div>
+
+    <div class="spot">
+      <div class="ico">🌅</div>
+      <div class="body">
+        <div class="title">First-light points &amp; windblown banks <span class="pill blue">TOPWATER</span></div>
+        <div class="gps">Main-lake points near Cedar Mills</div>
+        <div class="d">Cast 6" topwater plugs at first light — the most important window now that days are hot &amp; sunny. The bite fades fast once the sun gets high, so be on your spot before sunrise (~6:18a).</div>
+      </div>
+    </div>
+    <div class="spot">
+      <div class="ico">🌊</div>
+      <div class="body">
+        <div class="title">Old river-channel edges &amp; ledges <span class="pill go">START HERE MID-AM</span></div>
+        <div class="gps">33.8550, −96.8000</div>
+        <div class="d">#1 summer pattern. Drop live shad to ~30 ft over 40–45 ft of water on the channel edges. Move every 30–45 min if no marks.</div>
+      </div>
+    </div>
+    <div class="spot">
+      <div class="ico">🏞️</div>
+      <div class="body">
+        <div class="title">Denison Dam — deep summer fish <span class="pill blue">MIDDAY</span></div>
+        <div class="gps">33.8314, −96.5723</div>
+        <div class="d">Summer stripers stack in deep, cooler water near the dam — a strong midday play when surface fish shut off in the heat. Slabs or live shad in 40–65 ft. <strong>Long run from Cedar Mills; smoother on calmer Tuesday.</strong></div>
+      </div>
+    </div>
+    <div class="spot">
+      <div class="ico">🐦</div>
+      <div class="body">
+        <div class="title">Diving seagulls — anywhere <span class="pill warn">RUN &amp; GUN</span></div>
+        <div class="gps">Watch the open water</div>
+        <div class="d">Birds = stripers pushing shad up. Run to them; topwater or shad burned just under the surface.</div>
+      </div>
+    </div>
+
+    <div class="note go">🎯 <strong>Game plan:</strong> first light topwater on points → mid-morning drop live shad on channel edges (40–45 ft) → midday go deep near the dam as the surface bite dies in the heat → chase birds when they pop. The evening cool-down can trigger a second feed.</div>
+    <div class="note warn"><strong>Heat &amp; wind note:</strong> Monday's ~19 mph south wind chops up open water — fish protected channel structure or pick your crossings. Tuesday's lighter wind is friendlier for the long dam run. Either day, the midday heat is brutal — deep water and shade are your friends.</div>
+  </div>
+</section>
+
+<!-- GEAR -->
+<section id="gear">
+  <h2>🎯 Rigs &amp; Lures</h2>
+  <div class="card">
+    <h3>Live Bait Rig</h3>
+    <p style="font-size:14px;margin-top:4px">14–20 lb mono · Carolina rig: egg sinker → heavy swivel → leader → <strong>circle hook</strong>. Let the fish load up — don't swing hard.</p>
+    <h3>Artificial Backup</h3>
+    <p style="font-size:14px;margin-top:4px">5" fluke (baby bass) · 4" sassy shad (white/glow or chartreuse) on a 3/4–1 oz white jighead · swimbaits on points · slab spoons fished vertically over schooling fish.</p>
+  </div>
+</section>
+
+<!-- REGS -->
+<section id="regs">
+  <h2>📜 Regulations — Texoma Is Special</h2>
+  <div class="card">
+    <div class="grid">
+      <div class="kv"><div class="k">License</div><div class="v">Lake Texoma License Endorsement (~$12)</div></div>
+      <div class="kv"><div class="k">Striper Limit</div><div class="v">10/day — no more than 2 over 20"</div></div>
+    </div>
+    <div class="note">Texoma is a border lake. The <strong>endorsement</strong> lets you fish both TX + OK water on one license. A standard Texas license covers Texas water only. Know the limit before you cull — it's different from other Texas lakes.</div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <h2>📅 Schedule</h2>
+
+  <h3>Monday, June 29 — Day 1 (hot &amp; breezy)</h3>
+  <div class="sched">
+    <div class="srow"><div class="t">Pre-dawn</div><div class="a">Arrive Cedar Mills. Bait tank running with ice + salt. Launch before first light (~6:18a sunrise).</div></div>
+    <div class="srow"><div class="t">First light</div><div class="a">Topwater on points &amp; banks near the ramp — your best window before the heat. Net shad in coves once it's light.</div></div>
+    <div class="srow"><div class="t">Mid-morning</div><div class="a"><strong>PRIME</strong> — live shad on river-channel edges (40–45 ft). Graph, drop, move every 30–45 min.</div></div>
+    <div class="srow"><div class="t">Midday</div><div class="a">Heat builds (index 100°F+). Go deep near Denison Dam — slabs/live shad in 40–65 ft. Hydrate hard, find shade.</div></div>
+    <div class="srow"><div class="t">Evening</div><div class="a"><strong>SECOND FEED</strong> — as it cools, stripers often push again. Stay on the channel edges.</div></div>
+  </div>
+
+  <h3>Tuesday, June 30 — Day 2 (calmer, beat the heat)</h3>
+  <div class="sched">
+    <div class="srow"><div class="t">Pre-dawn</div><div class="a">Launch early — the cool morning is your window before another 95°F day. Lighter wind today.</div></div>
+    <div class="srow"><div class="t">First light</div><div class="a">Topwater on points; net fresh shad. Calmer wind makes the long run to the dam smoother today.</div></div>
+    <div class="srow"><div class="t">Mid-morning</div><div class="a"><strong>PRIME</strong> — live shad on channel edges, or make the dam run for deep fish while it's calm.</div></div>
+    <div class="srow"><div class="t">Early PM</div><div class="a">Heat peaks. Fish deep/shade or call it early. Watch yourself &amp; crew for heat exhaustion.</div></div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section id="todo">
+  <h2>✅ Night-Before Checklist</h2>
+  <div class="card todo">
+    <div class="prog" id="todo-prog">0 / 11 done</div>
+    <label><input type="checkbox"> Texoma fishing license + endorsement</label>
+    <label><input type="checkbox"> Cast net (8 ft, 3/8" mesh)</label>
+    <label><input type="checkbox"> Bait tank + aerator + block ice + salt + defoamer</label>
+    <label><input type="checkbox"> Circle hooks / egg sinkers / swivels / leader</label>
+    <label><input type="checkbox"> 14–20 lb rods rigged</label>
+    <label><input type="checkbox"> Flukes / sassy shad / swimbaits / slabs / jigheads</label>
+    <label><input type="checkbox"> Cooler + ice for the catch</label>
+    <label><input type="checkbox"> Sun protection: hat, sun shirt, high-SPF sunscreen, polarized shades</label>
+    <label><input type="checkbox"> Extra water + electrolytes (it's 95–97°F — bring more than you think)</label>
+    <label><input type="checkbox"> Call Cedar Mills 903-523-4222 (ramp / pass) + bait marina</label>
+    <label><input type="checkbox"> Re-check weather both mornings</label>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section id="contacts">
+  <h2>📞 Contacts &amp; Links</h2>
+  <div class="card">
+    <div class="spot">
+      <div class="ico">🚤</div>
+      <div class="body"><div class="title">Cedar Mills Marina &amp; Resort</div>
+        <div class="d"><a href="tel:9035234222">(903) 523-4222</a> • Gordonville, TX • <a href="https://www.cedarmills.com/">cedarmills.com</a></div></div>
+    </div>
+    <div class="spot">
+      <div class="ico">⛽</div>
+      <div class="body"><div class="title">Lake Texoma Marina (Mon bait backup)</div>
+        <div class="d"><a href="tel:8176827271">(817) 682-7271</a> • Whitesboro, TX</div></div>
+    </div>
+    <div class="spot">
+      <div class="ico">🛥️</div>
+      <div class="body"><div class="title">Cedar Bayou Marina (closed Mon)</div>
+        <div class="d"><a href="tel:9035234248">(903) 523-4248</a> • Gordonville, TX</div></div>
+    </div>
+    <div class="spot">
+      <div class="ico">🎣</div>
+      <div class="body"><div class="title">TX License Store</div>
+        <div class="d"><a href="https://tpwd.texas.gov/business/licenses/">tpwd.texas.gov/business/licenses</a> • Lake Texoma endorsement</div></div>
+    </div>
+    <h3>🔗 Sources</h3>
+    <ul class="src">
+      <li><a href="https://forecast.weather.gov/MapClick.php?lat=33.746&lon=-96.57">NWS — Lake Texoma forecast</a></li>
+      <li><a href="https://tpwd.texas.gov/fishboat/fish/recreational/lakes/texoma/">TPWD — Fishing Lake Texoma</a></li>
+      <li><a href="https://texomaconnect.com/lake-texoma-fishing-reports/">Texoma Connect — Fishing Reports</a></li>
+      <li><a href="https://txfishingguide.com/lake-texoma-striper-fishing-changes-with-the-seasons/">Texoma Striper Guide — Seasonal patterns</a></li>
+      <li><a href="https://www.cedarmills.com/">Cedar Mills Marina &amp; Resort</a></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Lake Texoma Striper Trip • June 29–30, 2026<br>
+  <span class="heart">Tight lines and big stripers!</span>
+</footer>
+
+<script>
+  // Countdown to Monday 6/29/2026 5:00 AM CDT
+  var launch = new Date("2026-06-29T05:00:00-05:00").getTime();
+  function tick(){
+    var now = Date.now(), d = launch - now;
+    if(d < 0){ document.getElementById("cd-d").textContent="0";
+      document.getElementById("cd-h").textContent="0";
+      document.getElementById("cd-m").textContent="0"; return; }
+    document.getElementById("cd-d").textContent = Math.floor(d/86400000);
+    document.getElementById("cd-h").textContent = Math.floor(d/3600000)%24;
+    document.getElementById("cd-m").textContent = Math.floor(d/60000)%60;
+  }
+  tick(); setInterval(tick, 30000);
+
+  // Checklist progress
+  var boxes = document.querySelectorAll(".todo input");
+  var prog = document.getElementById("todo-prog");
+  function upd(){
+    var done = 0; boxes.forEach(function(b){ if(b.checked) done++; });
+    prog.textContent = done + " / " + boxes.length + " done";
+  }
+  boxes.forEach(function(b){ b.addEventListener("change", upd); });
+</script>
+
+</body>
+</html>
