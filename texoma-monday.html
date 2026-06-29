@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lake Texoma Striper Trip – June 29–30, 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --bg:#0a1622; --bg2:#0f2236; --card:#13283f; --card2:#16314c;
@@ -103,6 +105,19 @@
   .src li{margin:5px 0;font-size:14px}
   footer{text-align:center;color:var(--muted);padding:30px 16px 50px;border-top:1px solid var(--line);margin-top:24px;font-size:14px}
   .heart{color:var(--gold)}
+
+  /* Map */
+  #lakemap{height:420px;border-radius:12px;border:1px solid var(--line);margin:4px 0 10px;z-index:1}
+  @media(max-width:560px){#lakemap{height:340px}}
+  .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--card2);color:var(--ink);border:1px solid var(--line)}
+  .leaflet-popup-content{margin:10px 12px;font-size:13px;line-height:1.45}
+  .leaflet-popup-content b{color:var(--gold)}
+  .leaflet-container{background:#0a1622;font:inherit}
+  .leaflet-bar a{background:var(--card2);color:var(--ink);border-bottom:1px solid var(--line)}
+  .leaflet-bar a:hover{background:var(--card)}
+  .map-legend{display:flex;flex-wrap:wrap;gap:8px 16px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12px;margin-bottom:10px}
+  .map-legend span{display:flex;align-items:center;gap:6px}
+  .map-legend i{width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid #fff}
 </style>
 </head>
 <body>
@@ -261,6 +276,15 @@
   <h2>📍 Where to Fish</h2>
   <div class="card">
     <div class="note">📡 <strong>GPS coordinates (decimal degrees, WGS84)</strong> — punch these into your fish finder or phone. They mark the general area; use your graph to dial in once on-site. <strong>Key insight: stay on the west end.</strong> The dam's deep fish are a ~22-mile run east; there's textbook water within a few miles of Cedar Mills.</div>
+
+    <div class="map-legend">
+      <span><i style="background:#36d399"></i> Launch</span>
+      <span><i style="background:#34c3ff"></i> Fishing spots (1–4)</span>
+      <span><i style="background:#ffb454"></i> Dam (long run)</span>
+      <span><i style="background:#c98bff"></i> Bait</span>
+    </div>
+    <div id="lakemap"></div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 14px">Tap any pin for details. Drag to pan, scroll/pinch to zoom.</p>
 
     <div class="spot">
       <div class="ico">①</div>
@@ -444,6 +468,35 @@
     prog.textContent = done + " / " + boxes.length + " done";
   }
   boxes.forEach(function(b){ b.addEventListener("change", upd); });
+
+  // Lake map (Leaflet)
+  (function(){
+    if(typeof L === "undefined") return;
+    var spots = [
+      {n:"Cedar Mills Ramp", t:"LAUNCH ~5:45 AM", d:"Your launch point. All fishing spots are a short run from here.", lat:33.8295, lng:-96.8114, c:"#36d399", r:9},
+      {n:"1. Buncombe Creek points", t:"FIRST STOP", d:"Stripers stack on the points at the mouth of Buncombe Cove. Topwater at first light, then live-bait drift. (~4 mi NE, OK side)", lat:33.871, lng:-96.793, c:"#34c3ff", r:8},
+      {n:"2. Mill Creek humps", t:"GRAPH & DROP", d:"Shallow humps with markers NW of Mill Creek Marina. Graph the school, drop live shad or slabs. (~3 mi E)", lat:33.835, lng:-96.782, c:"#34c3ff", r:8},
+      {n:"3. The Islands / Sand Bass Pass", t:"DRIFT", d:"Drift live bait NW of the islands, North Island to Cardinal Cove point. Caution: Sand Bass Pass gets shallow. (~5 mi E)", lat:33.850, lng:-96.728, c:"#34c3ff", r:8},
+      {n:"4. Red River channel edges", t:"MID-AM", d:"Drop live shad to ~30 ft over the 35-40 ft offshore structure as the surface bite fades.", lat:33.830, lng:-96.740, c:"#34c3ff", r:8},
+      {n:"5. Denison Dam / Striper Alley", t:"LONG RUN ~22 mi", d:"Deepest, coolest summer water + the Striper Alley bluffs. Slabs/live shad 40-65 ft. Save for calm Tuesday.", lat:33.8175, lng:-96.5723, c:"#ffb454", r:8},
+      {n:"Lake Texoma Marina", t:"BAIT — open Mon 8a", d:"SW-side bait backup. Call (817) 682-7271. Opens after launch.", lat:33.8676, lng:-96.8939, c:"#c98bff", r:6},
+      {n:"Cedar Bayou Marina", t:"BAIT — closed Mon", d:"Closest marina but closed Monday. (903) 523-4248.", lat:33.8422, lng:-96.8504, c:"#c98bff", r:6}
+    ];
+    var map = L.map("lakemap", {scrollWheelZoom:false}).setView([33.845, -96.70], 11);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
+    }).addTo(map);
+    var group = [];
+    spots.forEach(function(s){
+      var m = L.circleMarker([s.lat, s.lng], {
+        radius:s.r, fillColor:s.c, color:"#fff", weight:2, opacity:1, fillOpacity:0.9
+      }).addTo(map);
+      m.bindPopup("<b>"+s.n+"</b><br><span style='color:#ffcf5c;font-size:11px;font-weight:700'>"+s.t+"</span><br>"+s.d+"<br><span style='color:#9db4cd;font-size:11px'>"+s.lat.toFixed(4)+", "+s.lng.toFixed(4)+"</span>");
+      group.push([s.lat, s.lng]);
+    });
+    map.fitBounds(group, {padding:[30,30]});
+    map.once("focus", function(){ map.scrollWheelZoom.enable(); });
+  })();
 </script>
 
 </body>
