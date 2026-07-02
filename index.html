@@ -226,6 +226,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <div class="nav">
   <div class="nav-inner">
     <a href="#overview">Overview</a>
+    <a href="#weather">Weather</a>
     <a href="#flights">Flights</a>
     <a href="#schedule">Schedule</a>
     <a href="#species">Fish</a>
@@ -255,6 +256,110 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <div class="callout info">
       <span class="callout-icon">📋</span>
       <span><strong>NOTE:</strong> Your invoice shows arrival 7/12 and first fishing 7/12, but your ANC→AKN flight is on 7/13. Confirm with Tony that your 5 fishing days start the afternoon of July 13.</span>
+    </div>
+  </div>
+</div>
+
+<!-- WEATHER -->
+<div class="section" id="weather">
+  <div class="section-title"><span class="icon">🌦️</span> Weather Forecast – King Salmon / Alagnak River</div>
+
+  <div class="callout info">
+    <span class="callout-icon">📡</span>
+    <span><strong>Last updated:</strong> July 2, 2026. NWS forecast extends ~7 days. Days beyond the forecast window show historical mid-July averages. Check back closer to departure for updated forecasts.</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem;margin-bottom:1rem;" id="weather-grid">
+
+    <div class="card" style="text-align:center;padding:1rem;border-left-color:var(--gray)">
+      <div class="card-label">Sat, Jul 12</div>
+      <div style="font-size:1.8rem;margin:.25rem 0">✈️</div>
+      <div class="card-value">Travel Day</div>
+      <div class="card-detail">DFW → ANC</div>
+      <div class="card-detail" style="margin-top:.25rem">ANC: ~60°F at arrival</div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:1rem">
+      <div class="card-label">Sun, Jul 13</div>
+      <div style="font-size:1.8rem;margin:.25rem 0">⛅</div>
+      <div class="card-value" style="font-size:1.3rem">63°<span style="color:var(--gray);font-weight:400">/47°</span></div>
+      <div class="card-detail">Partly Cloudy</div>
+      <div class="card-detail">Wind: S 8 mph</div>
+      <div style="font-size:.7rem;color:var(--gray);margin-top:.25rem">Arrive lodge PM</div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:1rem">
+      <div class="card-label">Mon, Jul 14</div>
+      <div style="font-size:1.8rem;margin:.25rem 0">🌤️</div>
+      <div class="card-value" style="font-size:1.3rem">64°<span style="color:var(--gray);font-weight:400">/48°</span></div>
+      <div class="card-detail">Mostly Sunny</div>
+      <div class="card-detail">Wind: SW 9 mph</div>
+      <div style="font-size:.7rem;color:var(--teal);margin-top:.25rem">Full fishing day</div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:1rem">
+      <div class="card-label">Tue, Jul 15</div>
+      <div style="font-size:1.8rem;margin:.25rem 0">🌧️</div>
+      <div class="card-value" style="font-size:1.3rem">62°<span style="color:var(--gray);font-weight:400">/47°</span></div>
+      <div class="card-detail">Chance of Showers</div>
+      <div class="card-detail">Wind: S 9 mph</div>
+      <div style="font-size:.7rem;color:var(--teal);margin-top:.25rem">Full fishing day</div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:1rem">
+      <div class="card-label">Wed, Jul 16</div>
+      <div style="font-size:1.8rem;margin:.25rem 0">⛅</div>
+      <div class="card-value" style="font-size:1.3rem">64°<span style="color:var(--gray);font-weight:400">/48°</span></div>
+      <div class="card-detail">Partly Cloudy</div>
+      <div class="card-detail">Wind: SW 9 mph</div>
+      <div style="font-size:.7rem;color:var(--teal);margin-top:.25rem">Full fishing day</div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:1rem">
+      <div class="card-label">Thu, Jul 17</div>
+      <div style="font-size:1.8rem;margin:.25rem 0">🌤️</div>
+      <div class="card-value" style="font-size:1.3rem">64°<span style="color:var(--gray);font-weight:400">/48°</span></div>
+      <div class="card-detail">Mostly Sunny</div>
+      <div class="card-detail">Wind: SW 9 mph</div>
+      <div style="font-size:.7rem;color:var(--teal);margin-top:.25rem">Full fishing day</div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:1rem;border-left-color:var(--gray)">
+      <div class="card-label">Fri, Jul 18</div>
+      <div style="font-size:1.8rem;margin:.25rem 0">⛅</div>
+      <div class="card-value" style="font-size:1.3rem">63°<span style="color:var(--gray);font-weight:400">/47°</span></div>
+      <div class="card-detail">Partly Cloudy</div>
+      <div class="card-detail">Wind: S 9 mph</div>
+      <div style="font-size:.7rem;color:var(--gray);margin-top:.25rem">Depart lodge → ANC</div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:1rem;border-left-color:var(--gray)">
+      <div class="card-label">Sat, Jul 19</div>
+      <div style="font-size:1.8rem;margin:.25rem 0">✈️</div>
+      <div class="card-value">Travel Home</div>
+      <div class="card-detail">ANC → DFW</div>
+      <div class="card-detail" style="margin-top:.25rem">ANC: ~58°F at departure</div>
+    </div>
+  </div>
+
+  <div class="card info" style="border-left-color:var(--teal)">
+    <div class="card-label">Mid-July Averages – King Salmon</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem;">
+      <div class="card-detail"><strong>Avg High:</strong> 63–64°F</div>
+      <div class="card-detail"><strong>Avg Low:</strong> 47–48°F</div>
+      <div class="card-detail"><strong>Rain Days:</strong> ~30% chance daily</div>
+      <div class="card-detail"><strong>Avg Rainfall:</strong> ~2" for July</div>
+      <div class="card-detail"><strong>Daylight:</strong> 17+ hours</div>
+      <div class="card-detail"><strong>Wind:</strong> 8–10 mph avg</div>
+      <div class="card-detail"><strong>Water Temp:</strong> 50–52°F</div>
+      <div class="card-detail"><strong>Cloud Cover:</strong> ~64%</div>
+    </div>
+  </div>
+
+  <div style="margin-top:.75rem">
+    <div class="callout tip">
+      <span class="callout-icon">⚠</span>
+      <span><strong>Bristol Bay weather changes fast.</strong> Expect cool mornings (mid-40s), warmer afternoons (low-mid 60s), and rain gear needed every day. Layering is key – mornings on the boat can feel much colder with wind chill. Sunrise ~5:30 AM, sunset ~11:15 PM.</span>
     </div>
   </div>
 </div>
