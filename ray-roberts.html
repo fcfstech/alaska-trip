@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landry Joe's Big Fishing Day! 🎣</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{
+    --bg:#071a2b; --bg2:#0c2d49; --card:#10324f; --card2:#17395a;
+    --ink:#f2f9ff; --muted:#a9c4dd; --line:#2a5a84;
+    --teal:#3ad4e0; --blue:#39b7ff; --sun:#ffd23f; --coral:#ff7a9c;
+    --lime:#6ee787; --purple:#c98bff;
+    --shadow:0 8px 26px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Trebuchet MS","Segoe UI",Verdana,Arial,sans-serif;
+    background:
+      radial-gradient(900px 500px at 80% -100px, rgba(58,212,224,.18), transparent 70%),
+      radial-gradient(900px 500px at 0% 10%, rgba(255,122,156,.12), transparent 70%),
+      linear-gradient(170deg,var(--bg),var(--bg2));
+    color:var(--ink);line-height:1.55}
+  .wrap{max-width:900px;margin:0 auto;padding:0 16px}
+
+  @keyframes wiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+  .wiggle{display:inline-block;animation:wiggle 1.2s ease-in-out infinite;transform-origin:50% 80%}
+  .bob{display:inline-block;animation:bob 2.4s ease-in-out infinite}
+
+  header.hero{text-align:center;padding:46px 16px 28px}
+  .hero .hi{font-size:16px;color:var(--teal);letter-spacing:3px;text-transform:uppercase;font-weight:700}
+  .hero h1{font-size:clamp(40px,11vw,86px);margin:6px 0 2px;font-weight:900;line-height:1;
+    background:linear-gradient(90deg,#ffd23f,#ff7a9c,#3ad4e0,#6ee787,#ffd23f);
+    background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:shine 6s linear infinite}
+  .hero .big-emoji{font-size:clamp(50px,14vw,96px);margin:4px 0}
+  .hero .sub{font-size:clamp(18px,5vw,26px);color:var(--sun);font-weight:800;margin-top:6px}
+  .hero .date{color:var(--ink);margin-top:10px;font-size:17px;font-weight:700}
+  .hero .place{color:var(--muted);font-size:14px;margin-top:2px}
+
+  .sleeps{margin:24px auto 4px;max-width:520px;background:linear-gradient(135deg,rgba(255,210,63,.16),rgba(58,212,224,.14));
+    border:2px solid var(--sun);border-radius:20px;padding:18px 16px;box-shadow:var(--shadow)}
+  .sleeps .num{font-size:64px;font-weight:900;color:var(--sun);line-height:1}
+  .sleeps .word{font-size:18px;font-weight:800;color:var(--ink)}
+  .sleeps .small{font-size:13px;color:var(--muted);margin-top:6px}
+
+  nav{position:sticky;top:0;z-index:30;background:rgba(7,26,43,.95);backdrop-filter:blur(8px);
+    border-bottom:2px solid var(--line);padding:9px 0;overflow-x:auto;white-space:nowrap}
+  nav .wrap{display:flex;gap:7px;justify-content:center}
+  nav a{color:var(--muted);text-decoration:none;font-size:14px;padding:8px 13px;border-radius:12px;font-weight:800}
+  nav a:hover{background:var(--card);color:var(--sun)}
+
+  section{padding:28px 0 4px}
+  h2{font-size:clamp(24px,6vw,32px);margin:6px 0 14px;font-weight:900;text-align:center}
+  .card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:16px}
+  .fun{font-size:17px}
+
+  .fact{background:var(--card2);border:2px solid var(--line);border-radius:16px;padding:14px 16px;margin:10px 0;font-size:16px;display:flex;gap:12px;align-items:flex-start}
+  .fact .fico{font-size:30px;line-height:1;min-width:34px;text-align:center}
+  .fact b{color:var(--sun)}
+
+  .mission{background:linear-gradient(135deg,rgba(110,231,135,.14),rgba(57,183,255,.12));border:2px solid var(--lime)}
+  .goal{display:flex;gap:12px;align-items:center;background:var(--card2);border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;cursor:pointer;font-size:17px;font-weight:700}
+  .goal input{width:24px;height:24px;accent-color:var(--lime);flex-shrink:0}
+  .goal .star{font-size:24px}
+
+  .steps .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+  .steps .n{min-width:40px;height:40px;border-radius:50%;background:var(--coral);color:#3a0a18;font-weight:900;
+    font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+  .steps .st{flex:1;font-size:16px}
+  .steps .st b{color:var(--teal)}
+
+  #lakemap{height:380px;border-radius:16px;border:2px solid var(--line);margin:6px 0 10px;z-index:1}
+  @media(max-width:560px){#lakemap{height:320px}}
+  .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--card2);color:var(--ink);border:1px solid var(--line)}
+  .leaflet-popup-content{margin:10px 12px;font-size:14px}
+  .leaflet-popup-content b{color:var(--sun)}
+  .leaflet-container{background:#071a2b;font:inherit}
+  .leaflet-bar a{background:var(--card2);color:var(--ink)}
+  .map-legend{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;font-size:13px;margin-bottom:10px;font-weight:700}
+  .map-legend span{display:flex;align-items:center;gap:6px}
+  .map-legend i{width:14px;height:14px;border-radius:50%;display:inline-block;border:2px solid #fff}
+
+  .bag label{display:flex;gap:12px;align-items:center;padding:12px 14px;border:2px solid var(--line);border-radius:14px;
+    margin-bottom:9px;background:var(--card2);cursor:pointer;font-size:16px;font-weight:700}
+  .bag input{width:24px;height:24px;accent-color:var(--teal)}
+  .bag .prog{text-align:center;font-size:15px;color:var(--sun);font-weight:800;margin-bottom:10px}
+
+  details.captain{background:var(--card2);border:2px dashed var(--line);border-radius:16px;padding:4px 16px;margin-top:10px}
+  details.captain summary{cursor:pointer;font-weight:800;color:var(--muted);padding:12px 0;font-size:15px;list-style:none}
+  details.captain summary::-webkit-details-marker{display:none}
+  details.captain summary:before{content:"🧭 ";}
+  .cap-row{display:flex;border-top:1px solid var(--line);padding:8px 0;font-size:14px;gap:10px}
+  .cap-row .cl{flex:0 0 150px;color:var(--teal);font-weight:700}
+  .cap-row .cv{flex:1;color:var(--muted)}
+  .cap-row .cv code{color:var(--ink)}
+
+  .cheer{text-align:center;font-size:clamp(22px,6vw,30px);font-weight:900;color:var(--sun);margin:10px 0}
+  footer{text-align:center;color:var(--muted);padding:26px 16px 50px;border-top:2px solid var(--line);margin-top:20px;font-size:15px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hi">Get Ready, Landry Joe!</div>
+    <div class="big-emoji"><span class="wiggle">🎣</span></div>
+    <h1>LANDRY JOE'S<br>BIG FISHING DAY</h1>
+    <div class="sub">🐟 Catching Sand Bass! 🐟</div>
+    <div class="date">Friday, October 9 &nbsp;•&nbsp; Super Early Morning!</div>
+    <div class="place">Lake Ray Roberts • with Dad 💙</div>
+
+    <div class="sleeps">
+      <div class="num" id="sleeps">--</div>
+      <div class="word">sleeps until we go fishing! 😴➡️🎣</div>
+      <div class="small" id="hm">loading the countdown…</div>
+    </div>
+  </div>
+</header>
+
+<nav><div class="wrap">
+  <a href="#yay">Our Trip</a>
+  <a href="#fish">Your Fish</a>
+  <a href="#mission">Mission</a>
+  <a href="#how">How To</a>
+  <a href="#map">Map</a>
+  <a href="#bag">My Bag</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="yay">
+  <h2>🌅 We're Going Fishing!</h2>
+  <div class="card fun">
+    <p style="margin-top:0">Hi Landry Joe! Super early on Friday morning, you and Dad are going out on the boat on a big lake to catch <b style="color:var(--sun)">sand bass</b> — and guess what? They swim around in <b style="color:var(--sun)">HUGE groups</b>, so when you find them, you can catch one after another after another! 🐟🐟🐟</p>
+    <p style="margin-bottom:0">We'll zoom out on the water right when the sun comes up, find the fish, and reel them in together. Get ready to have a <b style="color:var(--coral)">blast!</b> 🎉</p>
+  </div>
+</section>
+
+<section id="fish">
+  <h2>🐟 Meet Your Fish</h2>
+  <div class="card">
+    <div class="fact"><div class="fico">🐠</div><div>Sand bass swim in <b>giant schools</b> — sometimes hundreds of fish together! Find one and you've found a BUNCH.</div></div>
+    <div class="fact"><div class="fico">💦</div><div>They chase tiny fish called <b>shad</b> up to the top of the water. Sometimes the water looks like it's <b>boiling</b> — that means fish are right there!</div></div>
+    <div class="fact"><div class="fico">🐦</div><div>Watch for <b>birds diving</b> into the water. Birds are eating the shad too — so there are always fish right underneath them. Birds = fish!</div></div>
+    <div class="fact"><div class="fico">💪</div><div>They're little but <b>super strong</b> — they'll pull and tug on your line and make your rod bend. So fun!</div></div>
+    <div class="fact"><div class="fico">🏆</div><div>Most are about as big as your hand or a little bigger — and you're allowed to catch <b>lots</b> of them!</div></div>
+  </div>
+</section>
+
+<section id="mission">
+  <h2>⭐ Your Mission</h2>
+  <div class="card mission">
+    <p style="margin-top:0;font-size:17px;font-weight:700">Can you do all of these, Landry Joe? Tap each one when you do it! 👇</p>
+    <div class="goal"><input type="checkbox"><span class="star">⭐</span> Catch your very first fish</div>
+    <div class="goal"><input type="checkbox"><span class="star">⭐</span> Catch 5 fish</div>
+    <div class="goal"><input type="checkbox"><span class="star">🌟</span> Catch 10 fish</div>
+    <div class="goal"><input type="checkbox"><span class="star">🐦</span> Spot the diving birds first</div>
+    <div class="goal"><input type="checkbox"><span class="star">📸</span> Take a photo holding a fish</div>
+    <div class="goal"><input type="checkbox"><span class="star">🎣</span> Reel one in all by yourself</div>
+    <div class="cheer" id="missioncheer">You've got this! 💪</div>
+  </div>
+</section>
+
+<section id="how">
+  <h2>🎣 How We'll Catch Them</h2>
+  <div class="card steps">
+    <div class="step"><div class="n">1</div><div class="st"><b>Find the fish.</b> Dad watches the fish-finder screen and looks for birds. When we see a big group, we stop!</div></div>
+    <div class="step"><div class="n">2</div><div class="st"><b>Drop it down.</b> Let your shiny lure sink way down to where the fish are. Then lift it up and down — <i>jiggle, jiggle!</i></div></div>
+    <div class="step"><div class="n">3</div><div class="st"><b>Watch the bobber.</b> If we use a bobber, keep your eyes on it. When it goes <b>UNDER</b> — reel, reel, reel!</div></div>
+    <div class="step"><div class="n">4</div><div class="st"><b>Fish on!</b> Hold tight, keep your rod up, and wind the handle. Dad will help scoop it with the net. 🥳</div></div>
+    <div class="step"><div class="n">5</div><div class="st"><b>High five!</b> Say hi to your fish, take a picture, and drop it in the cooler or let it swim. Then do it again!</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <h2>🗺️ Where We're Going</h2>
+  <div class="card">
+    <div class="map-legend">
+      <span><i style="background:#6ee787"></i> Our boat ramp</span>
+      <span><i style="background:#39b7ff"></i> Fishing spots</span>
+      <span><i style="background:#ff7a9c"></i> Birds &amp; fish!</span>
+    </div>
+    <div id="lakemap"></div>
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin:0">Tap the dots to see each spot! 🐟</p>
+
+    <details class="captain">
+      <summary>Captain's Corner — details for Dad</summary>
+      <div class="cap-row"><div class="cl">Launch</div><div class="cv">Pond Creek Ramp (west side, off FM 1190 / Jones Rd). Fee + courtesy dock. <code>33.3872, −97.1072</code></div></div>
+      <div class="cap-row"><div class="cl">Time</div><div class="cv">On the water ~7:00 AM; sunrise 7:24. Prime bite first few hours; wrap ~10:30 before she fades.</div></div>
+      <div class="cap-row"><div class="cl">Spot 1 — first stop</div><div class="cv">Main-lake points off Pond Creek, deep-water access. Graph schools 25–35 ft, drop straight down. <code>~33.376, −97.088</code></div></div>
+      <div class="cap-row"><div class="cl">Spot 2 — if birds</div><div class="cv">Culp Branch / south surfacing zone (S of Wolf Is., N of Hawthorn Is.). Short SE run only if birds working. <code>~33.360, −97.062</code></div></div>
+      <div class="cap-row"><div class="cl">Spot 3 — far end</div><div class="cv">Dam-area points &amp; humps, 25–35 ft, vertical slabs. <code>33.3526, −97.0482</code></div></div>
+      <div class="cap-row"><div class="cl">Bank backup</div><div class="cv">Isle du Bois — rocks between pier &amp; swim beach. Restrooms, playground. <code>33.3818, −97.0321</code></div></div>
+      <div class="cap-row"><div class="cl">Tactics</div><div class="cv">¾–1 oz white/silver slab; small jig dropper 12–18" above; minnow under slip bobber (easiest for her); Rooster Tail / 2" swimbait / small topwater into boils.</div></div>
+      <div class="cap-row"><div class="cl">Rules</div><div class="cv">White bass 25/day, 10" min. Kids under 17 fish free in TX; adult needs a license. Confirm ramp open + check wind/forecast a day or two out.</div></div>
+    </details>
+  </div>
+</section>
+
+<section id="bag">
+  <h2>🎒 My Fishing Bag</h2>
+  <div class="card bag">
+    <div class="prog" id="bag-prog">Let's pack! 0 / 8</div>
+    <label><input type="checkbox"> 🦺 My life jacket</label>
+    <label><input type="checkbox"> 🎣 My fishing rod</label>
+    <label><input type="checkbox"> 🧢 Hat &amp; sunglasses</label>
+    <label><input type="checkbox"> 🧴 Sunscreen</label>
+    <label><input type="checkbox"> 🧥 A warm jacket (chilly on the water!)</label>
+    <label><input type="checkbox"> 🍎 Snacks &amp; a drink</label>
+    <label><input type="checkbox"> 📸 Camera for fish pictures</label>
+    <label><input type="checkbox"> 😁 My biggest smile</label>
+  </div>
+</section>
+
+<div class="cheer" style="margin:18px 0 6px">Have the BEST time, Landry Joe! <span class="bob">🎉🐟</span></div>
+
+</main>
+
+<footer>
+  Landry Joe &amp; Dad • Lake Ray Roberts • October 9, 2026 🎣<br>
+  <span style="color:var(--sun);font-weight:800">Tight lines, little angler!</span>
+</footer>
+
+<script>
+  var launch = new Date("2026-10-09T07:00:00-05:00").getTime();
+  function tick(){
+    var now = Date.now(), d = launch - now;
+    var days = Math.max(0, Math.ceil(d/86400000));
+    document.getElementById("sleeps").textContent = days;
+    var word = document.querySelector(".sleeps .word");
+    if(d <= 0){ document.getElementById("sleeps").textContent="0"; word.textContent="IT'S FISHING DAY!! 🎣🎉"; document.getElementById("hm").textContent="Go catch 'em!"; return; }
+    var m = Math.floor(d/60000)%60;
+    document.getElementById("hm").textContent = "(that's " + Math.floor(d/3600000) + " hours and " + m + " minutes!)";
+    if(days === 1) word.textContent = "sleep until we go fishing! 😴➡️🎣";
+  }
+  tick(); setInterval(tick, 30000);
+
+  var goals = document.querySelectorAll(".goal input");
+  var cheer = document.getElementById("missioncheer");
+  var msgs = ["You've got this! 💪","Woohoo! Keep going! 🎉","Amazing job! ⭐","You're a fishing star! 🌟","INCREDIBLE! 🏆","You did it ALL! You're the best! 👑🎣"];
+  function missionUpd(){ var done=0; goals.forEach(function(g){ if(g.checked) done++; }); cheer.textContent = msgs[Math.min(done, msgs.length-1)]; }
+  goals.forEach(function(g){ g.addEventListener("change", function(){ missionUpd(); this.parentElement.style.borderColor = this.checked ? "var(--lime)" : "var(--line)"; }); });
+
+  var bag = document.querySelectorAll(".bag input");
+  var bagProg = document.getElementById("bag-prog");
+  function bagUpd(){ var done=0; bag.forEach(function(b){ if(b.checked) done++; }); bagProg.textContent = (done===bag.length ? "All packed! Let's go! 🎣 "+done+" / "+bag.length : "Let's pack! "+done+" / "+bag.length); }
+  bag.forEach(function(b){ b.addEventListener("change", bagUpd); });
+
+  (function(){
+    if(typeof L === "undefined") return;
+    var spots = [
+      {n:"Our Boat Ramp 🚤", d:"This is where we put the boat in the water and start our adventure!", lat:33.3872, lng:-97.1072, c:"#6ee787", r:10},
+      {n:"Fishing Spot 1 ①", d:"First stop! We look for fish right here near the ramp.", lat:33.376, lng:-97.088, c:"#39b7ff", r:9},
+      {n:"Bird Spot! 🐦", d:"Sometimes LOTS of fish come up here and the birds dive in. Watch for them!", lat:33.360, lng:-97.062, c:"#ff7a9c", r:9},
+      {n:"Fishing Spot 3 ③", d:"Deep water by the dam where big groups of fish hang out.", lat:33.3526, lng:-97.0482, c:"#39b7ff", r:9},
+      {n:"Beach Backup 🏖️", d:"If we fish from the shore instead, we come here — it has a beach and a playground!", lat:33.3818, lng:-97.0321, c:"#c98bff", r:9}
+    ];
+    var map = L.map("lakemap", {scrollWheelZoom:false}).setView([33.37, -97.08], 12);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19}).addTo(map);
+    var pts=[];
+    spots.forEach(function(s){
+      var m=L.circleMarker([s.lat,s.lng],{radius:s.r,fillColor:s.c,color:"#fff",weight:3,opacity:1,fillOpacity:0.95}).addTo(map);
+      m.bindPopup("<b>"+s.n+"</b><br>"+s.d);
+      pts.push([s.lat,s.lng]);
+    });
+    map.fitBounds(pts,{padding:[35,35]});
+    map.once("focus", function(){ map.scrollWheelZoom.enable(); });
+  })();
+</script>
+
+</body>
+</html>
